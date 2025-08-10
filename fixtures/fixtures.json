@@ -1,0 +1,187 @@
+[
+  {
+    "id": "head_el150",
+    "name": "Head EL-150",
+    "type": "moving_head",
+    "channels": {
+      "pan_msb": 1,
+      "pan_lsb": 2,
+      "tilt_msb": 3,
+      "tilt_lsb": 4,
+      "speed": 5,
+      "dim": 6,
+      "shutter": 7,
+      "color": 8,
+      "gobo": 9
+    },
+    "arm": {
+      "shutter": 255
+    },
+    "meta": {
+      "channel_types": {
+        "pan": "position_16bit",
+        "tilt": "position_16bit",
+        "shutter": "strobe",
+        "color": "wheel",
+        "gobo": "wheel"
+      },
+      "value_mappings": {
+        "color": {
+          "0": "White",
+          "25": "Orange",
+          "50": "Cyan",
+          "75": "Purple",
+          "100": "Yellow",
+          "125": "Green",
+          "150": "Blue",
+          "175": "Red"
+        },
+        "gobo": {
+          "0": "Open",
+          "25": "Tunnel",
+          "50": "BigOval",
+          "75": "SmallOval",
+          "100": "Squares",
+          "125": "Shapes",
+          "150": "Tribal",
+          "175": "Slashes"
+        }
+      },
+      "position_constraints": {
+        "pan": {
+          "min": 0,
+          "max": 65535
+        },
+        "tilt": {
+          "min": 70,
+          "max": 3363
+        }
+      }
+    },
+    "position": {
+      "x": 0.5,
+      "y": 0.05,
+      "z": 0.9,
+      "label": "center_stage"
+    }
+  },
+  {
+    "id": "parcan_l",
+    "name": "ParCan L",
+    "type": "rgb",
+    "channels": {
+      "dim": 16,
+      "red": 17,
+      "green": 18,
+      "blue": 19,
+      "strobe": 20
+    },
+    "arm": {
+      "dim": 255
+    },
+    "meta": {
+      "channel_types": {
+        "dim": "dimmer",
+        "red": "color",
+        "green": "color",
+        "blue": "color"
+      }
+    },
+    "position": {
+      "x": 0.1,
+      "y": 0.1,
+      "z": 0.9,
+      "label": "stage_left"
+    }
+  },
+  {
+    "id": "parcan_r",
+    "name": "ParCan R",
+    "type": "rgb",
+    "channels": {
+      "dim": 22,
+      "red": 23,
+      "green": 24,
+      "blue": 25,
+      "strobe": 26,
+      "program": 27
+    },
+    "arm": {
+      "dim": 255
+    },
+    "meta": {
+      "channel_types": {
+        "dim": "dimmer",
+        "red": "color",
+        "green": "color",
+        "blue": "color"
+      }
+    },
+    "position": {
+      "x": 0.9,
+      "y": 0.1,
+      "z": 0.9,
+      "label": "stage_right"
+    }
+  },
+  {
+    "id": "parcan_pl",
+    "name": "Proton L",
+    "type": "rgb",
+    "channels": {
+      "dim": 28,
+      "red": 29,
+      "green": 30,
+      "blue": 31,
+      "strobe": 32,
+      "program": 33
+    },
+    "arm": {
+      "dim": 255
+    },
+    "meta": {
+      "channel_types": {
+        "dim": "dimmer",
+        "red": "color",
+        "green": "color",
+        "blue": "color"
+      }
+    },
+    "position": {
+      "x": 0.1,
+      "y": 0.8,
+      "z": 0.9,
+      "label": "stage_left"
+    }
+  },
+  {
+    "id": "parcan_pr",
+    "name": "Proton R",
+    "type": "rgb",
+    "channels": {
+      "dim": 35,
+      "red": 36,
+      "green": 37,
+      "blue": 38,
+      "strobe": 39,
+      "program": 40
+    },
+    "arm": {
+      "dim": 255
+    },
+    "meta": {
+      "channel_types": {
+        "dim": "dimmer",
+        "red": "color",
+        "green": "color",
+        "blue": "color"
+      }
+    },
+    "position": {
+      "x": 0.9,
+      "y": 0.8,
+      "z": 0.9,
+      "label": "stage_right"
+    }
+  }
+]

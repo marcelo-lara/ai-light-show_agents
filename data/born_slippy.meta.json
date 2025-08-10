@@ -1,0 +1,100 @@
+{
+  "title": "born slippy",
+  "genre": "EDM",
+  "duration": 135.7786865234375,
+  "bpm": 139.99,
+  "sections": [
+    {
+      "name": "Intro",
+      "start": 0.0,
+      "end": 34.21,
+      "prompt": ""
+    },
+    {
+      "name": "Verse",
+      "start": 34.21,
+      "end": 54.34,
+      "prompt": ""
+    },
+    {
+      "name": "Verse",
+      "start": 54.34,
+      "end": 80.18,
+      "prompt": ""
+    },
+    {
+      "name": "Verse",
+      "start": 80.18,
+      "end": 88.17,
+      "prompt": ""
+    },
+    {
+      "name": "Instrumental",
+      "start": 88.17,
+      "end": 97.16,
+      "prompt": ""
+    },
+    {
+      "name": "Chorus",
+      "start": 97.16,
+      "end": 102.32,
+      "prompt": ""
+    },
+    {
+      "name": "Bridge",
+      "start": 102.32,
+      "end": 122.88,
+      "prompt": ""
+    },
+    {
+      "name": "Outro",
+      "start": 122.88,
+      "end": 133.43,
+      "prompt": ""
+    }
+  ],
+  "key_moments": [
+    {
+      "start": 34.21,
+      "end": 55.21,
+      "name": "Drop",
+      "description": "Heavy drum starts"
+    },
+    {
+      "start": 55.21,
+      "end": 81.21,
+      "name": "Syncopated Energy Boost",
+      "description": "toms, kicks and snares"
+    },
+    {
+      "start": 81.21,
+      "end": 97.1,
+      "name": "Drum pattern change",
+      "description": ""
+    },
+    {
+      "start": 97.1,
+      "end": 102.3,
+      "name": "Toms and Hihats pattern",
+      "description": ""
+    },
+    {
+      "start": 102.3,
+      "end": 120.3,
+      "name": "Bridge",
+      "description": "Alternate 2 kicks and 2 snares"
+    },
+    {
+      "start": 120.3,
+      "end": 122.0,
+      "name": "Exit Bridge",
+      "description": "snares remain (no kicks)"
+    },
+    {
+      "start": 122.0,
+      "end": 134.3,
+      "name": "Outro",
+      "description": "same pattern as begining fades out "
+    }
+  ]
+}
