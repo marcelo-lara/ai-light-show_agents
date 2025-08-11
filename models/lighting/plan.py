@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import os
 
 
 @dataclass
@@ -10,8 +11,9 @@ class PlanEntry:
     description: str
 
 class Plan:
-    def __init__(self):
+    def __init__(self, base_path: str):
         self.plans = []
+        self._data_folder = os.path.join(base_path, "data")   
 
     def load_plan(self, song_name: str):
         # Load plans from data folder (e.g., data/born_slippy.plan.json)
