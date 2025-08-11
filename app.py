@@ -28,3 +28,8 @@ print("\n## Lighting Plan")
 for plan_entry in app_data.plan:
     print(f" - {plan_entry.name} ({plan_entry.start} - {plan_entry.end})")
     print(f"   {plan_entry.description}")
+
+####################################################################################################################################
+
+
+# 3. Translate Effects into Actionrs
