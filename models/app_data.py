@@ -3,6 +3,7 @@ from typing import List, Optional
 from pathlib import Path
 
 from models.fixtures.fixture_list import FixtureList
+from models.lighting.plan import Plan
 from models.song.song import Song
 
 class AppData:
@@ -26,9 +27,11 @@ class AppData:
 
         # load fixtures
         self._fixtures = FixtureList(self._fixtures_file)
+        self._plan = Plan(data_folder=str(self._data_folder))
 
     def load_song(self, song_name: str):
         self._song = Song(song_name, base_folder=str(self._base_folder))
+        self._plan.load_plan(song_name=song_name)
 
     @property
     def base_folder(self) -> Path:
@@ -45,3 +48,7 @@ class AppData:
     @property
     def song_name(self) -> str:
         return self._song.name
+
+    @property
+    def plan(self) -> Plan:
+        return self._plan

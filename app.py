@@ -23,3 +23,8 @@ for section in app_data.song.sections:
 print("\n### Key Moments")
 for key_moment in app_data.song.key_moments:
     print(f" - {key_moment.name} ({key_moment.start} - {key_moment.end})")
+
+print("\n## Lighting Plan")
+for plan_entry in app_data.plan:
+    print(f" - {plan_entry.name} ({plan_entry.start} - {plan_entry.end})")
+    print(f"   {plan_entry.description}")
