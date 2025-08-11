@@ -10,8 +10,9 @@ from .position_constraints import PositionConstraints
 from .constraint import Constraint
 
 class FixtureList:
-    def __init__(self):
+    def __init__(self, fixtures_file: str):
         self._fixtures: List[Fixture] = []
+        self.load_fixtures(fixtures_file)
 
     def load_fixtures(self, fixtures_file: str):
         with open(fixtures_file, 'r') as f:
