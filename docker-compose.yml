@@ -1,0 +1,18 @@
+services:
+  llm-service:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - /home/darkangel/ai-light-show/.ollama_data:/root/.ollama
+    restart: unless-stopped
+    command: serve
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+
+volumes:
+  ollama:
+

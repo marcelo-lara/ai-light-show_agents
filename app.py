@@ -1,3 +1,5 @@
+from agents.effect_tramslator.effect_translator import EffectTranslator
+from models.agent.agent import Agent
 from models.app_data import app_data
 song_name = "born_slippy"
 
@@ -30,5 +32,16 @@ for plan_entry in app_data.plan:
 
 ####################################################################################################################################
 
+agent = Agent()
+print("\n## Agents")
+print(f" - Server URL: {agent.server_url}")
+print(f" - Available Models:")
+for model in agent.get_models():
+    print(f"   - {model}")
 
-# 3. Translate Effects into Actionrs
+# 3. Translate Effects into Actions
+effect_translator = EffectTranslator()
+
+print("\n## EffectTranslator")
+print(f" - Model: {effect_translator.model}")
+print(f" - Prompt: {effect_translator.parse_context()}")
