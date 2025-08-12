@@ -12,8 +12,8 @@ class Song:
     def __init__(self, name: str, base_folder: str):
         self._name: str = name
         self._genre: Optional[str] = None
-        self._duration: Optional[float] = None
-        self._bpm: Optional[float] = None
+        self._duration: float = 0.0
+        self._bpm: float = 0.0
         self._mp3_file: Optional[str] = None
         self._sections: List[Section] = []
         self._key_moments: List[KeyMoment] = []
@@ -77,5 +77,22 @@ class Song:
 
     @property
     def beats(self) -> List[Beat]:
+        '''Load beats from data/born_slippy.beats.json.'''
+        if len(self._beats) > 0:
+            return self._beats
+        beats_file = os.path.join(self._data_folder, f"{self._name}.beats.json")
+        if os.path.exists(beats_file):
+            with open(beats_file, "r") as f:
+                self._beats = [Beat(**beat) for beat in json.load(f)]
         return self._beats
 
+
+    def get_beats(self, start: float = 0 , end: float = 0) -> List[Beat]:
+        '''Get beats within a specific time range.'''
+        if end == 0:
+            end = self._duration
+        return [beat for beat in self.beats if start <= beat.time < end]
+
+    def get_beats_array(self, start: float = 0 , end: float = 0) -> List[float]:
+        '''Get an array of beat times.'''
+        return [beat.time for beat in self.get_beats(start, end)]

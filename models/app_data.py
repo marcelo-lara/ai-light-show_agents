@@ -7,17 +7,22 @@ from models.lighting.plan import Plan
 from models.song.song import Song
 
 class AppData:
+    _instance = None
+    _initialized = False
 
-    def __init__(self, base_folder: Optional[str] = None):
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(AppData, cls).__new__(cls)
+        return cls._instance
+
+    def __init__(self):
+        if self._initialized:
+            return
+        
+        self._initialized = True
 
         # determine base folder
-        if not base_folder:
-            self._base_folder = Path(os.path.abspath(__file__)).parent.parent
-        else:
-            if not Path(base_folder).exists():
-                raise ValueError(f"Base folder '{base_folder}' does not exist")
-        if not self._base_folder:
-            raise ValueError("Base folder could not be determined")
+        self._base_folder = Path(os.path.abspath(__file__)).parent.parent
         
         # setup folders
         self._data_folder = os.path.join(self._base_folder, "data")
@@ -52,3 +57,5 @@ class AppData:
     @property
     def plan(self) -> Plan:
         return self._plan
+
+app_data = AppData()

@@ -1,6 +1,4 @@
-from models.app_data import AppData
-
-app_data = AppData()
+from models.app_data import app_data
 song_name = "born_slippy"
 
 print(f"Using base folder: {app_data.base_folder}\n")
@@ -28,6 +26,7 @@ print("\n## Lighting Plan")
 for plan_entry in app_data.plan:
     print(f" - {plan_entry.name} ({plan_entry.start} - {plan_entry.end})")
     print(f"   {plan_entry.description}")
+    print(f"   {app_data.song.get_beats_array(plan_entry.start, plan_entry.end)}")
 
 ####################################################################################################################################
 
