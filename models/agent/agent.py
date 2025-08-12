@@ -1,5 +1,7 @@
 import json
+import re
 from urllib import request
+from jinja2 import Environment, FileSystemLoader
 from models.app_data import AppData
 
 class Agent:
@@ -19,9 +21,16 @@ class Agent:
             raise ValueError(f"Error fetching models from Ollama: {e}")
         return []
 
-    def parse_context(self) -> str:
+    def parse_context(self, **args) -> str:
         # parse jinja template for inherited class (e.g. EffectTranslator -> effect_translator.j2)
-        return ""
+        # jinja folder is app_data.prompts_folder
+        class_name = self.__class__.__name__
+        template_name = re.sub(r'(?<!^)(?=[A-Z])', '_', class_name).lower() + ".j2"
+        
+        env = Environment(loader=FileSystemLoader(self.app_data.prompts_folder))
+        template = env.get_template(template_name)
+        
+        return template.render(agent=self, **args)
 
     def run(self):
         """Call the ollama server with the parsed context."""

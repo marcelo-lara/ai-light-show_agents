@@ -29,6 +29,7 @@ class AppData:
         self._mp3_folder = os.path.join(self._base_folder, "songs")
         self._logs_folder = os.path.join(self._base_folder, "logs")
         self._fixtures_file = os.path.join(self._base_folder, "fixtures", "fixtures.json")
+        self._prompts_folder = os.path.join(self._base_folder, "agents", "prompts")
 
         # load fixtures
         self._fixtures = FixtureList(self._fixtures_file)
@@ -57,5 +58,9 @@ class AppData:
     @property
     def plan(self) -> Plan:
         return self._plan
+
+    @property
+    def prompts_folder(self) -> str:
+        return self._prompts_folder
 
 app_data = AppData()
