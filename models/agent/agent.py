@@ -13,6 +13,7 @@ class Agent:
         self.server_url = server_url
         self._last_response = ''
         self._context = ''
+        self._thinking = False
 
     def get_models(self) -> list[str]:
         '''Get a list of model names from ollama server'''
@@ -55,7 +56,7 @@ class Agent:
         
         full_response = ""
         thinking_dots = 0
-        has_started_responding = False
+        self._thinking = True  # Agent is now thinking
         
         try:
             # Set longer timeout and disable read timeout for initial connection
@@ -73,9 +74,9 @@ class Agent:
                                 try:
                                     data = json.loads(line.decode('utf-8'))
                                     if 'response' in data and data['response']:
-                                        if not has_started_responding:
+                                        if self._thinking:
                                             print("\n" + "-" * 50)
-                                            has_started_responding = True
+                                            self._thinking = False  # Agent has started responding
                                         
                                         chunk = data['response']
                                         print(chunk, end='', flush=True)
@@ -87,7 +88,7 @@ class Agent:
                                     continue
                             else:
                                 # Show thinking animation while waiting
-                                if not has_started_responding:
+                                if self._thinking:
                                     thinking_dots = (thinking_dots + 1) % 4
                                     print('\r🧠 Model is thinking' + '.' * thinking_dots + ' ' * (3 - thinking_dots), end='', flush=True)
                                     await asyncio.sleep(0.5)
@@ -99,7 +100,7 @@ class Agent:
         except Exception as e:
             raise ValueError(f"Error calling Ollama: {e}")
         
-        if has_started_responding:
+        if not self._thinking:
             print("\n" + "-" * 50)
         else:
             print("\n❌ No response received from model")
