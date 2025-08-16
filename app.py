@@ -75,3 +75,6 @@ write_file(str(app_data.logs_folder / "effect_translator.context.txt"), context)
 print("\n## EffectTranslator")
 print(f" - Model: {effect_translator.model}")
 print(f" - Prompt: {len(context)}")
+
+print("\n## Calling Agent")
+effect_translator.run()

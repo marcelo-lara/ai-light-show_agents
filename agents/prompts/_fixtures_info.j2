@@ -1,4 +1,4 @@
-{% if fixtures -%}
+{%- if fixtures -%}
 ## Fixtures Available
 {% for fixture in fixtures -%}
 - {{ fixture.name }} ({{ fixture.id }}) : 
@@ -6,4 +6,4 @@
   Position: {{ fixture.position.x }}, {{ fixture.position.y }}; 
   Actions: {{ fixture.actions | map(attribute='name') | join(', ') }}
 {% endfor -%}
-{%- endif %}
+{%- endif -%}

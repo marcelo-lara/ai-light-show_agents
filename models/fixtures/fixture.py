@@ -18,14 +18,14 @@ class Fixture:
 
         # Global actions
         self._actions.append(
-            Action(name="set_channel", handler=self.set_channel, description="Set the channel value", parameters=[
+            Action(name="set_channel", handler=self.set_channel, description="Set the channel value over the specified time range.", parameters=[
                 ActionParameter(name="channel", value=List[str], description="List of channel names to set"),
-                ActionParameter(name="value", value=float, description="Value to set the channel to"),
+                ActionParameter(name="value", value=float, description="Value to set the channel to (0.0 - 1.0)"),
                 ActionParameter(name="start_time", value=float, description="Start time for the action"),
                 ActionParameter(name="end_time", value=float, description="End time for the action"),
             ], hidden=False))
         self._actions.append(
-            Action(name="fade_channel", handler=self.fade_channel, description="Fade the channel value", parameters=[
+            Action(name="fade_channel", handler=self.fade_channel, description="Fade the channel value from start_value to end_value over the specified time range.", parameters=[
                 ActionParameter(name="channel", value=List[str], description="List of channel names to fade"),
                 ActionParameter(name="start_value", value=float, description="Starting value for the fade (0.0 - 1.0)"),
                 ActionParameter(name="end_value", value=float, description="Ending value for the fade (0.0 - 1.0)"),

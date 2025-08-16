@@ -9,6 +9,8 @@ class Agent:
         self.app_data = AppData()
         self.model = model
         self.server_url = server_url
+        self._last_response = ''
+        self._context = ''
 
     def get_models(self) -> list[str]:
         '''Get a list of model names from ollama server'''
@@ -34,4 +36,6 @@ class Agent:
 
     def run(self):
         """Call the ollama server with the parsed context."""
-        pass
+        if self._context == '':
+            raise ValueError("Context is empty. Please call parse_context() first.")
+        
