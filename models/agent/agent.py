@@ -1,5 +1,7 @@
 import json
 import re
+import asyncio
+import aiohttp
 from urllib import request
 from jinja2 import Environment, FileSystemLoader
 from models.app_data import AppData
@@ -32,10 +34,80 @@ class Agent:
         env = Environment(loader=FileSystemLoader(self.app_data.prompts_folder))
         template = env.get_template(template_name)
         
-        return template.render(agent=self, **args)
+        context = template.render(agent=self, **args)
+        self._context = context
+        return context
 
-    def run(self):
-        """Call the ollama server with the parsed context."""
+    async def run_async(self):
+        """Call the ollama server async with streaming and display partial results."""
         if self._context == '':
             raise ValueError("Context is empty. Please call parse_context() first.")
+        
+        payload = {
+            "model": self.model,
+            "prompt": self._context,
+            "stream": True
+        }
+        
+        print("🤖 AI Response (streaming):")
+        print("-" * 50)
+        print("🧠 Model is thinking...", end='', flush=True)
+        
+        full_response = ""
+        thinking_dots = 0
+        has_started_responding = False
+        
+        try:
+            # Set longer timeout and disable read timeout for initial connection
+            timeout = aiohttp.ClientTimeout(total=None, sock_read=600)
+            connector = aiohttp.TCPConnector(keepalive_timeout=600)
+            
+            async with aiohttp.ClientSession(timeout=timeout, connector=connector) as session:
+                async with session.post(
+                    f"{self.server_url}/api/generate",
+                    json=payload
+                ) as response:
+                    if response.status == 200:
+                        async for line in response.content:
+                            if line:
+                                try:
+                                    data = json.loads(line.decode('utf-8'))
+                                    if 'response' in data and data['response']:
+                                        if not has_started_responding:
+                                            print("\n" + "-" * 50)
+                                            has_started_responding = True
+                                        
+                                        chunk = data['response']
+                                        print(chunk, end='', flush=True)
+                                        full_response += chunk
+                                        
+                                    if data.get('done', False):
+                                        break
+                                except json.JSONDecodeError:
+                                    continue
+                            else:
+                                # Show thinking animation while waiting
+                                if not has_started_responding:
+                                    thinking_dots = (thinking_dots + 1) % 4
+                                    print('\r🧠 Model is thinking' + '.' * thinking_dots + ' ' * (3 - thinking_dots), end='', flush=True)
+                                    await asyncio.sleep(0.5)
+                    else:
+                        error_text = await response.text()
+                        raise ValueError(f"Error from Ollama server: {response.status} - {error_text}")
+        except asyncio.TimeoutError:
+            raise ValueError("Request to Ollama server timed out")
+        except Exception as e:
+            raise ValueError(f"Error calling Ollama: {e}")
+        
+        if has_started_responding:
+            print("\n" + "-" * 50)
+        else:
+            print("\n❌ No response received from model")
+            
+        self._last_response = full_response
+        return full_response
+
+    def run(self):
+        """Synchronous wrapper for async run."""
+        return asyncio.run(self.run_async())
         

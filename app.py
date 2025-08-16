@@ -78,3 +78,8 @@ print(f" - Prompt: {len(context)}")
 
 print("\n## Calling Agent")
 effect_translator.run()
+
+print("\n## Complete Response")
+print("=" * 50)
+print(effect_translator._last_response)
+print("=" * 50)
