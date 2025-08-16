@@ -5,10 +5,11 @@ from typing import Any
 @dataclass
 class ActionParameter:
     name: str
-    value: Any
+    type: Any
     description: str
+    optional: bool = False
     def __str__(self) -> str:
-        return f"{self.name}: {self.value} | {self.description})"
+        return f"{'(optional)' if self.optional else ''} {self.name}: {self.type} | {self.description}"
 
     def __repr__(self) -> str:
-        return f"ActionParameter(name={self.name}, value={self.value}, description={self.description})"
+        return f"ActionParameter(name={self.name}, value={self.type}, description={self.description}, optional={self.optional})"

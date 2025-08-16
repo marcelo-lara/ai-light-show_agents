@@ -50,7 +50,7 @@ class Agent:
             "stream": True
         }
         
-        print("🤖 AI Response (streaming):")
+        print(f"🤖 AI Response ({self.model} | streaming):")
         print("-" * 50)
         print("🧠 Model is thinking...", end='', flush=True)
         

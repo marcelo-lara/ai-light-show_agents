@@ -1,4 +1,6 @@
+import asyncio
 import os
+import time
 from utils import write_file
 from agents.effect_tramslator.effect_translator import EffectTranslator
 from models.agent.agent import Agent
@@ -76,10 +78,45 @@ print("\n## EffectTranslator")
 print(f" - Model: {effect_translator.model}")
 print(f" - Prompt: {len(context)}")
 
-print("\n## Calling Agent")
-effect_translator.run()
+agent_list = [
+    'deepseek-r1:8b', 
+    'gemma3n:e4b', 
+    'tinyllama:latest', 
+    'qwen3:8b', 
+    'command-r:latest', 
+    'phi3:latest', 
+    'mistral:latest', 
+    'cogito:8b']
 
-print("\n## Complete Response")
-print("=" * 50)
-print(effect_translator._last_response)
-print("=" * 50)
+for _agent in agent_list:
+    print(f" - Testing Agent: {_agent}")
+    start_time = time.time()
+    
+    effect_translator = EffectTranslator(model=_agent)
+    context = effect_translator.parse_context(
+        song=app_data.song, 
+        beats=beat_array, 
+        fixtures=app_data.fixtures, 
+        actions_reference=actions_reference,
+        user_prompt=user_prompt)
+    
+    print(f" - Context Length: {len(context)}")
+    
+    # Run the agent
+    asyncio.run(effect_translator.run_async())
+    
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(f" - Elapsed Time: {elapsed_time / 60:.2f} minutes")
+
+    # save the response
+    write_file(str(app_data.logs_folder / f"effect_translator.{_agent}.response.txt"), effect_translator._last_response)
+
+
+# print("\n## Calling Agent")
+# effect_translator.run()
+
+# print("\n## Complete Response")
+# print("=" * 50)
+# print(effect_translator._last_response)
+# print("=" * 50)

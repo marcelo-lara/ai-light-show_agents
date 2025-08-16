@@ -6,7 +6,7 @@ from .action import Action
 from .action_parameter import ActionParameter
 
 class Fixture:
-    def __init__(self, id: str, name: str, fixture_type: str, channels: Dict[str, int], arm: Dict[str, Any], meta: Meta, position: Position):
+    def __init__(self, id: str, name: str, fixture_type: str, channels: Dict[str, int], arm: Dict[str, Any], meta: Meta, position: Position, actions: List[Action] = []):
         self._id = id
         self._name = name
         self._type = fixture_type
@@ -14,23 +14,23 @@ class Fixture:
         self._arm = arm
         self._meta = meta
         self._position = position
-        self._actions: List[Action] = []
+        self._actions = actions
 
         # Global actions
         self._actions.append(
             Action(name="set_channel", handler=self.set_channel, description="Set the channel value over the specified time range.", parameters=[
-                ActionParameter(name="channel", value=List[str], description="List of channel names to set"),
-                ActionParameter(name="value", value=float, description="Value to set the channel to (0.0 - 1.0)"),
-                ActionParameter(name="start_time", value=float, description="Start time for the action"),
-                ActionParameter(name="end_time", value=float, description="End time for the action"),
+                ActionParameter(name="start_time", type=float, description="Time when the channel value will be set"),
+                ActionParameter(name="duration", type=float, description="Hold the value for the specified duration (default: remain until the end)", optional=True),
+                ActionParameter(name="channel", type=List[str], description="List of channel names to set"),
+                ActionParameter(name="value", type=float, description="Value to set the channel to (0.0 - 1.0)"),
             ], hidden=False))
         self._actions.append(
             Action(name="fade_channel", handler=self.fade_channel, description="Fade the channel value from start_value to end_value over the specified time range.", parameters=[
-                ActionParameter(name="channel", value=List[str], description="List of channel names to fade"),
-                ActionParameter(name="start_value", value=float, description="Starting value for the fade (0.0 - 1.0)"),
-                ActionParameter(name="end_value", value=float, description="Ending value for the fade (0.0 - 1.0)"),
-                ActionParameter(name="start_time", value=float, description="Start time for the fade"),
-                ActionParameter(name="end_time", value=float, description="End time for the fade")
+                ActionParameter(name="start_time", type=float, description="Start time for the fade, channels value will be set to start_value"),
+                ActionParameter(name="duration", type=float, description="Duration of the fade to get to the end value"),
+                ActionParameter(name="channel", type=List[str], description="List of channel names to fade ('red', 'green', 'blue', 'white')"),
+                ActionParameter(name="start_value", type=float, description="Starting value for the fade (0.0 - 1.0)"),
+                ActionParameter(name="end_value", type=float, description="Ending value for the fade (0.0 - 1.0)"),
         ], hidden=False))
 
     @property
@@ -69,11 +69,17 @@ class Fixture:
         '''Software effects that this fixture can render in dmx-canvas'''
         return self._actions
 
-    def set_channel(self, channel: List[str], value: float, start_time: float = 0, end_time: float = 0):
+    def set_arm(self, arm_state: bool = True):
+        '''Prepare the fixture to emit light.'''
+        if arm_state:
+            for arm_channel, arm_value in self._arm.items():
+                self.set_channel([arm_channel], arm_value if arm_value else 0)
+
+    def set_channel(self, channel: List[str], value: float, start_time: float = 0, duration: float = 0):
         '''Set the value of a channel during the specified time range.'''
         pass
 
-    def fade_channel(self, channel: List[str], start_value: float = 1.0, end_value: float = 0.0, start_time: float = 0, end_time: float = 0):
+    def fade_channel(self, channel: List[str], start_value: float = 1.0, end_value: float = 0.0, start_time: float = 0, duration: float = 0):
         '''Fade the value of a channel from start_value to end_value over the specified time range.'''
         pass
 
