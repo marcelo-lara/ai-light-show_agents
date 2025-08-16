@@ -3,7 +3,7 @@ import json
 from typing import List
 from .fixture import Fixture
 from .moving_head import MovingHead
-from .par_can import ParCan
+from .par_can import RgbParCan
 from .position import Position
 from .meta import Meta
 from .position_constraints import PositionConstraints
@@ -50,8 +50,8 @@ class FixtureList:
 
             if fixture_data['type'] == 'moving_head':
                 fixture = MovingHead(**fixture_args)
-            elif fixture_data['type'] == 'rgb':
-                fixture = ParCan(**fixture_args)
+            elif fixture_data['type'] == 'rgb_parcan':
+                fixture = RgbParCan(**fixture_args)
             else:
                 continue
 

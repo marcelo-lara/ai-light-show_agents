@@ -40,6 +40,10 @@ class AppData:
         self._plan.load_plan(song_name=song_name)
 
     @property
+    def logs_folder(self) -> Path:
+        return Path(self._logs_folder)
+
+    @property
     def base_folder(self) -> Path:
         return self._base_folder
 

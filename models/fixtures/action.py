@@ -4,7 +4,7 @@ from typing import Any, List
 from .action_parameter import ActionParameter
 
 @dataclass
-class ActionModel:
+class Action:
     name: str
     handler: Any #callable
     description: str

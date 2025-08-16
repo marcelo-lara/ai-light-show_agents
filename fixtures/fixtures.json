@@ -68,7 +68,7 @@
   {
     "id": "parcan_l",
     "name": "ParCan L",
-    "type": "rgb",
+    "type": "rgb_parcan",
     "channels": {
       "dim": 16,
       "red": 17,
@@ -97,7 +97,7 @@
   {
     "id": "parcan_r",
     "name": "ParCan R",
-    "type": "rgb",
+    "type": "rgb_parcan",
     "channels": {
       "dim": 22,
       "red": 23,
@@ -127,7 +127,7 @@
   {
     "id": "parcan_pl",
     "name": "Proton L",
-    "type": "rgb",
+    "type": "rgb_parcan",
     "channels": {
       "dim": 28,
       "red": 29,
@@ -157,7 +157,7 @@
   {
     "id": "parcan_pr",
     "name": "Proton R",
-    "type": "rgb",
+    "type": "rgb_parcan",
     "channels": {
       "dim": 35,
       "red": 36,

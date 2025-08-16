@@ -51,4 +51,9 @@ class Plan:
         return self.plans
 
     def __iter__(self):
+        """Iterate over the PlanEntry objects."""
         return iter(self.plans)
+    
+    def __getitem__(self, index):
+        """Get a PlanEntry by index."""
+        return self.plans[index]
