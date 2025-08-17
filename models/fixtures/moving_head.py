@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import Any, Dict
 from .fixture import Fixture
-from .meta import Meta
-from .position import Position
+from .meta.meta import Meta
+from .meta.position import Position
 
 class MovingHead(Fixture):
     def __init__(self, id: str, name: str, fixture_type: str, channels: Dict[str, int], arm: Dict[str, Any], meta: Meta, position: Position):

@@ -4,10 +4,10 @@ from typing import List
 from .fixture import Fixture
 from .moving_head import MovingHead
 from .par_can import RgbParCan
-from .position import Position
-from .meta import Meta
-from .position_constraints import PositionConstraints
-from .constraint import Constraint
+from .meta.position import Position
+from .meta.meta import Meta
+from .meta.position_constraints import PositionConstraints
+from .meta.constraint import Constraint
 
 class FixtureList:
     def __init__(self, fixtures_file: str):

@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Any, Dict, List
-from .meta import Meta
-from .position import Position
-from .action import Action
-from .action_parameter import ActionParameter
+from .meta.meta import Meta
+from .meta.position import Position
+from .meta.action import Action
+from .meta.action_parameter import ActionParameter
 
 class Fixture:
     def __init__(self, id: str, name: str, fixture_type: str, channels: Dict[str, int], arm: Dict[str, Any], meta: Meta, position: Position, actions: List[Action] = []):

@@ -66,3 +66,7 @@ class DMXCanvas:
                 hex_values = " ".join([f"{byte:02x}" for byte in frame_slice])
                 log.append(f"{time:.2f} | {hex_values}")
         return "\n".join(log)
+
+    def render(self):
+        """Render the DMX canvas as a series of frames."""
+        pass

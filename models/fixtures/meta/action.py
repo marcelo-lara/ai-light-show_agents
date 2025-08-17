@@ -1,7 +1,9 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, List
+
 from .action_parameter import ActionParameter
+
 
 @dataclass
 class Action:

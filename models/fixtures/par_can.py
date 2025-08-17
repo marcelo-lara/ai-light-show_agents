@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import Any, Dict, List
 
-from models.fixtures.action import Action
-from models.fixtures.action_parameter import ActionParameter
+from models.fixtures.meta.action import Action
+from models.fixtures.meta.action_parameter import ActionParameter
 from .fixture import Fixture
-from .meta import Meta
-from .position import Position
+from .meta.meta import Meta
+from .meta.position import Position
 
 class RgbParCan(Fixture):
     def __init__(self, id: str, name: str, fixture_type: str, channels: Dict[str, int], arm: Dict[str, Any], meta: Meta, position: Position):
