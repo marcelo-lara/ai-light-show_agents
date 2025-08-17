@@ -50,44 +50,11 @@ print(f" - Available Models:")
 for model in agent.get_models():
     print(f"   - {model}")
 
+print("\n## EffectTranslator")
+
 # 3. Translate Effects into Actions
 effect_translator = EffectTranslator()
-
-user_prompt = plan_entry.description
-beat_array = app_data.song.get_beats_array(plan_entry.start, plan_entry.end)
-
-actions_reference = {}
-for fixture in app_data.fixtures:
-    for action in fixture.actions:
-        actions_reference[action.name] = action
-        
-for action_name, action in actions_reference.items():
-    print(f" - Action: {action_name}")
-    for param in action.parameters:
-        print(f"   - Param: {param}")
-
-context = effect_translator.parse_context(
-    song=app_data.song, 
-    beats=beat_array, 
-    fixtures=app_data.fixtures, 
-    actions_reference=actions_reference,
-    user_prompt=user_prompt)
-write_file(str(app_data.logs_folder / "effect_translator.context.txt"), context)
-
-print("\n## EffectTranslator")
 print(f" - Model: {effect_translator.model}")
 
-effect_translator = EffectTranslator()
-context = effect_translator.parse_context(
-    song=app_data.song, 
-    beats=beat_array, 
-    fixtures=app_data.fixtures, 
-    actions_reference=actions_reference,
-    user_prompt=user_prompt)
-
-print(f" - Context Length: {len(context)}")
-
+effect_translator.parse_plan_entry(plan_entry)
 asyncio.run(effect_translator.run_async())
-
-end_time = time.time()
-write_file(str(app_data.logs_folder / f"effect_translator.response.txt"), effect_translator._last_response)

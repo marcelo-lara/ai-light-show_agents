@@ -5,6 +5,7 @@ import aiohttp
 from urllib import request
 from jinja2 import Environment, FileSystemLoader
 from models.app_data import AppData
+from utils import write_file
 
 class Agent:
     def __init__(self, model:str = "gpt-4o-mini", server_url: str = "http://localhost:11434"):
@@ -31,9 +32,15 @@ class Agent:
         # jinja folder is app_data.prompts_folder
         class_name = self.__class__.__name__
         template_name = re.sub(r'(?<!^)(?=[A-Z])', '_', class_name).lower() + ".j2"
-        
+
         env = Environment(loader=FileSystemLoader(self.app_data.prompts_folder))
         template = env.get_template(template_name)
+
+        # Add common template vars
+        if 'song' not in args:
+            args['song'] = self.app_data.song
+        if 'fixtures' not in args:
+            args['fixtures'] = self.app_data.fixtures
         
         context = template.render(agent=self, **args)
         self._context = context
@@ -106,6 +113,10 @@ class Agent:
             print("\n❌ No response received from model")
             
         self._last_response = full_response
+        
+        # Write the response to a file
+        write_file(str(self.app_data.logs_folder / f"{self.__class__.__name__}.response.txt"), full_response)
+
         return full_response
 
     def run(self):
