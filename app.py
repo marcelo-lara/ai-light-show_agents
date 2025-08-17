@@ -3,7 +3,7 @@ import os
 import time
 from utils import write_file
 from agents.effect_tramslator.effect_translator import EffectTranslator
-from models.agent.agent import Agent
+from agents.agent import Agent
 from models.app_data import app_data
 from models.lighting.plan import PlanEntry
 song_name = "born_slippy"
@@ -76,47 +76,18 @@ write_file(str(app_data.logs_folder / "effect_translator.context.txt"), context)
 
 print("\n## EffectTranslator")
 print(f" - Model: {effect_translator.model}")
-print(f" - Prompt: {len(context)}")
 
-agent_list = [
-    'deepseek-r1:8b', 
-    'gemma3n:e4b', 
-    'tinyllama:latest', 
-    'qwen3:8b', 
-    'command-r:latest', 
-    'phi3:latest', 
-    'mistral:latest', 
-    'cogito:8b']
+effect_translator = EffectTranslator()
+context = effect_translator.parse_context(
+    song=app_data.song, 
+    beats=beat_array, 
+    fixtures=app_data.fixtures, 
+    actions_reference=actions_reference,
+    user_prompt=user_prompt)
 
-for _agent in agent_list:
-    print(f" - Testing Agent: {_agent}")
-    start_time = time.time()
-    
-    effect_translator = EffectTranslator(model=_agent)
-    context = effect_translator.parse_context(
-        song=app_data.song, 
-        beats=beat_array, 
-        fixtures=app_data.fixtures, 
-        actions_reference=actions_reference,
-        user_prompt=user_prompt)
-    
-    print(f" - Context Length: {len(context)}")
-    
-    # Run the agent
-    asyncio.run(effect_translator.run_async())
-    
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    print(f" - Elapsed Time: {elapsed_time / 60:.2f} minutes")
+print(f" - Context Length: {len(context)}")
 
-    # save the response
-    write_file(str(app_data.logs_folder / f"effect_translator.{_agent}.response.txt"), effect_translator._last_response)
+asyncio.run(effect_translator.run_async())
 
-
-# print("\n## Calling Agent")
-# effect_translator.run()
-
-# print("\n## Complete Response")
-# print("=" * 50)
-# print(effect_translator._last_response)
-# print("=" * 50)
+end_time = time.time()
+write_file(str(app_data.logs_folder / f"effect_translator.response.txt"), effect_translator._last_response)

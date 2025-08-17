@@ -1,5 +1,5 @@
 from models.app_data import AppData
-from models.agent.agent import Agent
+from agents.agent import Agent
 
 class EffectTranslator(Agent):
     def __init__(self, model:str = "cogito:8b"):

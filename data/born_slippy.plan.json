@@ -4,6 +4,7 @@
     "start": 0.0,
     "end": 33.75,
     "name": "Intro",
-    "description": "Blue flash from left to right on every beat"
+    "description": "wave of blue flashes from left to right at every beat from 0.0 to 33.75"
   }
+
 ]
