@@ -35,5 +35,4 @@ class RgbParCan(Fixture):
         if channels == ['white'] or channels == ['rgb']:
             channels = ['red', 'green', 'blue']
 
-        # Implementation of the flash action
-        print(f"Flashing {self.name} at {start_time} for {duration} with initial value {initial_value} on channels {channels}")
+        pass
