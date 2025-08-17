@@ -52,11 +52,11 @@ class Song:
         return self._genre
 
     @property
-    def duration(self) -> Optional[float]:
+    def duration(self) -> float:
         return self._duration
 
     @property
-    def bpm(self) -> Optional[float]:
+    def bpm(self) -> float:
         return self._bpm
 
     @property

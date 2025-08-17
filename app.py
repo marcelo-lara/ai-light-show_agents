@@ -1,6 +1,8 @@
 import asyncio
 import os
 import time
+from typing import Dict
+from models.dmx.dmx_canvas import DMXCanvas
 from utils import write_file
 from agents.effect_tramslator.effect_translator import EffectTranslator
 from agents.agent import Agent
@@ -56,5 +58,12 @@ print("\n## EffectTranslator")
 effect_translator = EffectTranslator()
 print(f" - Model: {effect_translator.model}")
 
-effect_translator.parse_plan_entry(plan_entry)
-asyncio.run(effect_translator.run_async())
+# effect_translator.parse_plan_entry(plan_entry)
+# asyncio.run(effect_translator.run_async())
+
+
+## Start DMX Canvas
+print("\n## DMX Canvas")
+dmx_canvas = DMXCanvas(duration=app_data.song.duration)
+
+print(dmx_canvas.get_canvas_log(end_time=0.1, last_channel=40))
