@@ -26,13 +26,19 @@ class RgbParCan(Fixture):
 
         super().__init__(id, name, fixture_type, channels, arm, meta, position, actions=self._actions)
 
-    def handle_flash(self, start_time: float, duration: float = 0.5, initial_value: float = 1.0, channels: List[str] = ['white']):
+    def handle_flash(self, start_time: float, duration: float = 0.5, initial_value: float = 1.0, end_value: float = 0.0, channels: List[str] = ['white']):
         """
-        Handle the flash action for the RGB Par Can fixture.
+        Render the flash action for the RGB Par Can fixture.
         """
         
         # If no channels are specified, default to all three RGB channels
         if channels == ['white'] or channels == ['rgb']:
             channels = ['red', 'green', 'blue']
 
-        pass
+        self.fade_channel(
+            channel=channels,
+            start_value=initial_value,
+            end_value=end_value,
+            start_time=start_time,
+            duration=duration
+        )

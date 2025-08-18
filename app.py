@@ -73,13 +73,12 @@ print(f" - Available Models:")
 for model in agent.get_models():
     print(f"   - {model}")
 
-print("\n## EffectTranslator")
-
 # 3. Translate Effects into Actions
 effect_translator = EffectTranslator()
+print("\n## EffectTranslator")
 print(f" - Model: {effect_translator.model}")
+effect_translator.parse_plan_entry(plan_entry)
 
-# effect_translator.parse_plan_entry(plan_entry)
 # asyncio.run(effect_translator.run_async())
 
 
