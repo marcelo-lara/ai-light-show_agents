@@ -63,3 +63,6 @@ class FixtureList:
 
     def __iter__(self):
         return iter(self._fixtures)
+    
+    def __getitem__(self, index: int) -> Fixture:
+        return self._fixtures[index]

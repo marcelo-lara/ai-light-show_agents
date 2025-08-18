@@ -6,12 +6,13 @@ from models.dmx.dmx_canvas import DMXCanvas
 from utils import write_file
 from agents.effect_tramslator.effect_translator import EffectTranslator
 from agents.agent import Agent
-from models.app_data import app_data
+from models.app_data import AppData
 from models.lighting.plan import PlanEntry
 song_name = "born_slippy"
 
 ####################################################################################################################################
 os.system('clear')
+app_data = AppData()
 print(f"Using base folder: {app_data.base_folder}\n")
 
 # list fixtures
@@ -43,6 +44,26 @@ print(f" - {plan_entry.name} ({plan_entry.start} - {plan_entry.end})")
 print(f"   {plan_entry.description}")
 print(f"   {app_data.song.get_beats_array(plan_entry.start, plan_entry.end)}")
 
+
+## Start DMX Canvas
+print("\n## DMX Canvas")
+dmx_canvas = app_data.dmx_canvas
+print(dmx_canvas.get_canvas_log(end_time=0.1, last_channel=40))
+
+####################################################################################################################################
+# Test Fixture render
+print("## Fixture Render")
+
+fixture = app_data.fixtures[1]
+fixture.set_channel(['blue'], 1.0, 0.0, 1.0)
+fixture.fade_channel(['red'],
+                        start_time=0.0,
+                        duration=1.0,
+                        start_value=0.2,
+                        end_value=0.8
+                     )
+print(dmx_canvas.get_canvas_log(end_time=0.1, last_channel=40))
+
 ####################################################################################################################################
 
 agent = Agent()
@@ -62,8 +83,3 @@ print(f" - Model: {effect_translator.model}")
 # asyncio.run(effect_translator.run_async())
 
 
-## Start DMX Canvas
-print("\n## DMX Canvas")
-dmx_canvas = DMXCanvas(duration=app_data.song.duration)
-
-print(dmx_canvas.get_canvas_log(end_time=0.1, last_channel=40))

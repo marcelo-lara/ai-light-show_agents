@@ -24,6 +24,8 @@ Project-specific conventions and patterns
 - Models/API: the agent uses Ollama endpoints: `GET /api/tags` to list models and `POST /api/generate` for streaming responses; default server_url is `http://localhost:11434` and default model used in code is `gpt-4o-mini` (EffectTranslator overrides to `cogito:8b`).
 - DMX indexing: `DMXCanvas` stores frames as `bytearray(512)` and uses 0-based indexing in code. When generating DMX channel values, validate whether other systems expect 1-based channels.
 - Time-keyed frames: frames keys are floats rounded to 2 decimals (see `init_canvas`), and `get_frame()` returns the nearest previous frame when an exact timestamp is missing.
+- NEVER read Json files directly, always use the provided data access methods in the AppData singleton.
+- ALWAYS use public properties of AppData and its contained models. Do not use internal _variables or __private_variables.
 
 Developer workflows (concrete commands)
 - Start the LLM service (uses the included compose file): run `docker-compose up -d llm-service` from the repo root to start Ollama as configured in `docker-compose.yml`.

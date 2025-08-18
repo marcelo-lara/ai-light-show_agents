@@ -40,7 +40,12 @@ class AppData:
     def load_song(self, song_name: str):
         self._song = Song(song_name, base_folder=str(self._base_folder))
         self._plan.load_plan(song_name=song_name)
-        self._dmx_canvas = DMXCanvas(duration=self._song.duration)
+        self._dmx_canvas.init_canvas(duration=self._song.duration)
+        print("--AppData.load_song()")
+
+    @property
+    def dmx_canvas(self) -> DMXCanvas:
+        return self._dmx_canvas
 
     @property
     def logs_folder(self) -> Path:
@@ -69,5 +74,3 @@ class AppData:
     @property
     def prompts_folder(self) -> str:
         return self._prompts_folder
-
-app_data = AppData()

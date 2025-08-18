@@ -77,11 +77,34 @@ class Fixture:
 
     def set_channel(self, channel: List[str], value: float, start_time: float = 0, duration: float = 0):
         '''Set the value of a channel during the specified time range.'''
-        pass
+        from models.dmx.dmx_canvas import DMXCanvas
+        dmx_canvas:DMXCanvas = DMXCanvas()
+        channel_numbers = [self.channels[c] for c in channel]
+        value_int = int(value * 255)
+
+        def set_value(frame_time: float):
+            for channel_number in channel_numbers:
+                dmx_canvas.set_frame_value(frame_time, channel_number, value_int)
+
+        dmx_canvas.render(set_value, start_time=start_time, duration=duration)
+
 
     def fade_channel(self, channel: List[str], start_value: float = 1.0, end_value: float = 0.0, start_time: float = 0, duration: float = 0):
         '''Fade the value of a channel from start_value to end_value over the specified time range.'''
-        pass
+        from models.dmx.dmx_canvas import DMXCanvas
+        dmx_canvas:DMXCanvas = DMXCanvas()
+
+        channel_numbers = [self.channels[c] for c in channel]
+        
+        start_value_int = int(start_value * 255)
+        end_value_int = int(end_value * 255)
+
+        def fade_value(frame_time: float, progress: float):
+            for channel_number in channel_numbers:
+                value = int(start_value_int + (end_value_int - start_value_int) * progress)
+                dmx_canvas.set_frame_value(frame_time, channel_number, value)
+
+        dmx_canvas.render(fade_value, start_time=start_time, duration=duration)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(id='{self._id}', name='{self._name}')"
