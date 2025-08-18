@@ -65,7 +65,12 @@ fixture.fade_channel(['red'],
 print(dmx_canvas.get_canvas_log(end_time=0.1, last_channel=40))
 
 ####################################################################################################################################
+print("\n## ActionList")
+action_list = app_data.action_list
+for action in action_list:
+    print(f" - {action}")
 
+####################################################################################################################################
 agent = Agent()
 print("\n## Agents")
 print(f" - Server URL: {agent.server_url}")

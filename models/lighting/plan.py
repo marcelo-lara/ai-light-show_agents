@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-import os
+from pathlib import Path
+import json
 
 
 @dataclass
@@ -11,30 +12,33 @@ class PlanEntry:
     description: str
 
 class Plan:
-    def __init__(self, data_folder: str):
+    def __init__(self):
         self.plans = []
-        self._data_folder = data_folder
+        from models.app_data import AppData
+        self._data_folder = AppData().data_folder
+        self._plan_file = ''
 
-    def load_plan(self, song_name: str):
+    def _actions_file(self) -> str: 
+        """Return the path to the actions file."""
+        from models.app_data import AppData
+        return str(Path(self._data_folder) / f"{AppData().song_name}.plan.json")
+
+    def load_plan(self):
         """Load plans from data folder (e.g., data/born_slippy.plan.json) or create an empty one."""
-        import json
-        plan_path = os.path.join(self._data_folder, f"{song_name}.plan.json")
-        self.plans = []
-        if os.path.exists(plan_path):
-            with open(plan_path, 'r') as f:
-                try:
-                    data = json.load(f)
-                    for entry in data:
-                        self.plans.append(PlanEntry(**entry))
-                except Exception as e:
-                    print(f"Failed to load plan: {e}")
+        plan_path = self._actions_file()
+        if not Path(plan_path).exists():
+            self.plans = []
+            return
+        with open(plan_path, 'r') as f:
+            try:
+                data = json.load(f)
+                self.plans = [PlanEntry(**entry) for entry in data]
+            except Exception as e:
+                print(f"Failed to load plan: {e}")
 
-
-    def save_plan(self, song_name: str):
+    def save_plan(self):
         """Save plan to data folder (e.g., data/born_slippy.plan.json)."""
-        import json
-        plan_path = os.path.join(self._data_folder, f"{song_name}.plan.json")
-        os.makedirs(self._data_folder, exist_ok=True)
+        plan_path = self._actions_file()
         with open(plan_path, 'w') as f:
             json.dump([entry.__dict__ for entry in self.plans], f, indent=2)
 

@@ -4,6 +4,7 @@ from pathlib import Path
 
 from models.dmx.dmx_canvas import DMXCanvas
 from models.fixtures.fixture_list import FixtureList
+from models.lighting.commands import ActionList
 from models.lighting.plan import Plan
 from models.song.song import Song
 
@@ -34,18 +35,24 @@ class AppData:
 
         # load fixtures
         self._fixtures = FixtureList(self._fixtures_file)
-        self._plan = Plan(data_folder=str(self._data_folder))
+        self._plan = Plan()
+        self._action_list = ActionList()
         self._dmx_canvas = DMXCanvas()
         
     def load_song(self, song_name: str):
         self._song = Song(song_name, base_folder=str(self._base_folder))
-        self._plan.load_plan(song_name=song_name)
+        self._plan.load_plan()
+        self._action_list.load()
         self._dmx_canvas.init_canvas(duration=self._song.duration)
         print("--AppData.load_song()")
 
     @property
     def dmx_canvas(self) -> DMXCanvas:
         return self._dmx_canvas
+
+    @property
+    def data_folder(self) -> Path:
+        return Path(self._data_folder)
 
     @property
     def logs_folder(self) -> Path:
@@ -70,6 +77,10 @@ class AppData:
     @property
     def plan(self) -> Plan:
         return self._plan
+
+    @property
+    def action_list(self) -> ActionList:
+        return self._action_list
 
     @property
     def prompts_folder(self) -> str:
