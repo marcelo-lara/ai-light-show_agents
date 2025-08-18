@@ -21,6 +21,7 @@ class RgbParCan(Fixture):
                     ActionParameter(name="start_time", type=float, description="Time when the flash effect is fired"),
                     ActionParameter(name="duration", type=List[str], description="Fade out duration (default 1 beat)", optional=True),
                     ActionParameter(name="initial_value", type=float, description="Initial brightness value (default Max = 1.0)", optional=True),
+                    ActionParameter(name="end_value", type=float, description="End brightness value (default Min = 0.0)", optional=True),
                     ActionParameter(name="channels", type=float, description="list of channels to flash (default: 'white')", optional=True),
             ], hidden=False))
 
