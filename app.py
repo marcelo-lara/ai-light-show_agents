@@ -52,15 +52,15 @@ print(dmx_canvas.get_canvas_log(end_time=0.1, last_channel=40))
 
 ####################################################################################################################################
 # Test Fixture render
-print("## Fixture Render")
-
+print("\n## Fixture Render")
+app_data.fixtures.arm_all_fixtures()
 fixture = app_data.fixtures[1]
 fixture.set_channel(['blue'], 1.0, 0.0, 1.0)
 fixture.fade_channel(['red'],
                         start_time=0.0,
                         duration=1.0,
-                        start_value=0.2,
-                        end_value=0.8
+                        start_value=0.1,
+                        end_value=0.9
                      )
 print(dmx_canvas.get_canvas_log(end_time=0.1, last_channel=40))
 

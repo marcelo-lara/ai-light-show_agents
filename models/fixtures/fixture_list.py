@@ -61,6 +61,10 @@ class FixtureList:
     def fixtures(self) -> List[Fixture]:
         return self._fixtures
 
+    def arm_all_fixtures(self):
+        for fixture in self._fixtures:
+            fixture.set_arm(True)
+
     def __iter__(self):
         return iter(self._fixtures)
     

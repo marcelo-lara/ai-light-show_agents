@@ -73,14 +73,24 @@ class Fixture:
         '''Prepare the fixture to emit light.'''
         if arm_state:
             for arm_channel, arm_value in self._arm.items():
-                self.set_channel([arm_channel], arm_value if arm_value else 0)
+                self.set_channel([arm_channel], explicit_value=arm_value if arm_value else 0)
 
-    def set_channel(self, channel: List[str], value: float, start_time: float = 0, duration: float = 0):
-        '''Set the value of a channel during the specified time range.'''
+    def set_channel(self, channel: List[str], value: float = 0, start_time: float = 0, duration: float = 0, explicit_value: int = -1):
+        '''
+        Set the value of a channel during the specified time range.
+        Args:
+            channel: List of channel names to set.
+            value: Value to set the channel to (0.0 - 1.0).
+            start_time: Time when the channel value will be set OR beginning of the song.
+            duration: Duration to hold the value (default: remain until the end of the song).
+        '''
         from models.dmx.dmx_canvas import DMXCanvas
         dmx_canvas:DMXCanvas = DMXCanvas()
         channel_numbers = [self.channels[c] for c in channel]
-        value_int = int(value * 255)
+        if explicit_value >= 0:
+            value_int = explicit_value
+        else:
+            value_int = int(value * 255)
 
         def set_value(frame_time: float):
             for channel_number in channel_numbers:
