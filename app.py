@@ -3,6 +3,7 @@ import os
 import time
 from typing import Dict
 from models.dmx.dmx_canvas import DMXCanvas
+from models.lighting.actionList import ActionEntry
 from utils import write_file
 from agents.effect_tramslator.effect_translator import EffectTranslator
 from agents.agent import Agent
@@ -67,6 +68,20 @@ print(dmx_canvas.get_canvas_log(end_time=0.1, last_channel=40))
 ####################################################################################################################################
 print("\n## ActionList")
 action_list = app_data.action_list
+action_list.clear_all()
+action_list.add_action(ActionEntry(
+    fixture_id='parcan_l',
+    start_time=0.0,
+    duration=1.0,
+    action='flash',
+    parameters={
+        'start_time': 0.0,
+        'duration': 1.0,
+        'color': 'blue',
+        'intensity': 1.0
+    }
+))
+
 for action in action_list:
     print(f" - {action}")
 

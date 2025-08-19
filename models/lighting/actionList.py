@@ -48,7 +48,7 @@ class ActionEntry:
     straightforward (ActionList.save uses entry.__dict__).
     """
 
-    def __init__(self, start_time: float, duration: float, fixture_id: str, parameters: dict[str, Any]):
+    def __init__(self, start_time: float, action:str, duration: float, fixture_id: str, parameters: dict[str, Any]):
         """Initialize a new ActionEntry.
 
         Parameters
@@ -64,6 +64,7 @@ class ActionEntry:
         """
         self.start_time = start_time
         self.duration = duration
+        self.action = action
         self.fixture_id = fixture_id
         self.parameters = parameters
 
