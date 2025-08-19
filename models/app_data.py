@@ -4,7 +4,7 @@ from pathlib import Path
 
 from models.dmx.dmx_canvas import DMXCanvas
 from models.fixtures.fixture_list import FixtureList
-from models.lighting.actionList import ActionList
+from models.lighting.action_list import ActionList
 from models.lighting.plan import Plan
 from models.song.song import Song
 
