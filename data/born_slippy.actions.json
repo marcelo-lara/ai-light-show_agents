@@ -1,0 +1,471 @@
+[
+  {
+    "start_time": 0.0,
+    "duration": 1.0,
+    "action": "flash",
+    "fixture_id": "parcan_l",
+    "parameters": {
+      "start_time": 0.0,
+      "duration": 1.0,
+      "channels": [
+        "blue"
+      ],
+      "wrong_param": 0.5,
+      "initial_value": 1.0
+    }
+  },
+  {
+    "start_time": 0.371,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_pl",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 0.371,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 0.72,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_l",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 0.72,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 1.045,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_r",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 1.045,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 1.37,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_pr",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 1.37,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 1.695,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_pl",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 1.695,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 2.043,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_l",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 2.043,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 2.415,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_r",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 2.415,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 2.775,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_pr",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 2.775,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 3.135,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_pl",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 3.135,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 3.483,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_l",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 3.483,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 3.82,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_r",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 3.82,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 4.145,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_pr",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 4.145,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 4.47,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_pl",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 4.47,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 4.806,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_l",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 4.806,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 5.155,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_r",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 5.155,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 5.515,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_pr",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 5.515,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 5.851,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_pl",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 5.851,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 6.188,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_l",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 6.188,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 6.525,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_r",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 6.525,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 6.885,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_pr",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 6.885,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 7.221,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_pl",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 7.221,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 7.546,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_l",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 7.546,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 7.872,
+    "duration": 1.0,
+    "action": "flash",
+    "fixture_id": "parcan_r",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "initial_value": 1.0,
+      "end_value": 0.0,
+      "start_time": 7.872,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 8.197,
+    "duration": 1.0,
+    "action": "flash",
+    "fixture_id": "parcan_pr",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "initial_value": 1.0,
+      "end_value": 0.0,
+      "start_time": 8.197,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 8.533,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_pl",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 8.533,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 8.882,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_l",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 8.882,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 9.242,
+    "duration": 1.0,
+    "action": "flash",
+    "fixture_id": "parcan_r",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "initial_value": 1.0,
+      "end_value": 0.0,
+      "start_time": 9.242,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 9.601,
+    "duration": 1.0,
+    "action": "flash",
+    "fixture_id": "parcan_pr",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "initial_value": 1.0,
+      "end_value": 0.0,
+      "start_time": 9.601,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 9.961,
+    "duration": 0.0,
+    "action": "flash",
+    "fixture_id": "parcan_pl",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "start_time": 9.961,
+      "duration": 0.0
+    }
+  },
+  {
+    "start_time": 10.31,
+    "duration": 1.0,
+    "action": "fade_channel",
+    "fixture_id": "parcan_l",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "end_value": 0.0,
+      "start_value": 1.0,
+      "start_time": 10.31,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 10.646,
+    "duration": 1.0,
+    "action": "flash",
+    "fixture_id": "parcan_r",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "initial_value": 1.0,
+      "end_value": 0.0,
+      "start_time": 10.646,
+      "duration": 1.0
+    }
+  },
+  {
+    "start_time": 10.971,
+    "duration": 1.0,
+    "action": "flash",
+    "fixture_id": "parcan_pr",
+    "parameters": {
+      "channel": [
+        "blue"
+      ],
+      "initial_value": 1.0,
+      "end_value": 0.0,
+      "start_time": 10.971,
+      "duration": 1.0
+    }
+  }
+]

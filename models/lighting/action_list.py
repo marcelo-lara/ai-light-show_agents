@@ -68,6 +68,10 @@ class ActionEntry:
         self.action = action
         self.fixture_id = fixture_id
         self.parameters = parameters
+        
+        # add or update start_time and duration to the parameters dictionary
+        self.parameters['start_time'] = start_time
+        self.parameters['duration'] = duration
 
     def __repr__(self) -> str:
         """Return a concise, readable representation for debugging."""

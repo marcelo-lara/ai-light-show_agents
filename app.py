@@ -8,6 +8,7 @@ from agents.effect_tramslator.effect_translator import EffectTranslator
 from agents.agent import Agent
 from models.app_data import AppData
 from models.lighting.plan import PlanEntry
+from utils import read_file
 song_name = "born_slippy"
 
 def print_canvas():
@@ -106,6 +107,13 @@ print("\n## EffectTranslator")
 print(f" - Model: {effect_translator.model}")
 effect_translator.parse_plan_entry(plan_entry)
 
-asyncio.run(effect_translator.run_async())
+
+
+effect_translator._last_response = read_file(str(app_data.logs_folder / "EffectTranslator.response.txt"))
+print(effect_translator._last_response)
+effect_translator.parse_response()
+
+#asyncio.run(effect_translator.run_async())
+
 
 
