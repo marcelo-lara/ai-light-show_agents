@@ -110,10 +110,6 @@ effect_translator.parse_plan_entry(plan_entry)
 
 
 effect_translator._last_response = read_file(str(app_data.logs_folder / "EffectTranslator.response.txt"))
+#asyncio.run(effect_translator.run_async())
 print(effect_translator._last_response)
 effect_translator.parse_response()
-
-#asyncio.run(effect_translator.run_async())
-
-
-
