@@ -23,35 +23,27 @@ class EffectTranslator(Agent):
         write_file(str(self.app_data.logs_folder / "effect_translator.context.txt"), self._context)
         
     def parse_response(self):
-        # TODO: parse each line received from the model into ActionEntry and add it to the ActionList
-        # remove actions within the same time range (only if the response contains actions)
-        # ```actions
-        # flash parcan_pl at 0.371 channels=[blue] initial_value=1.0 end_value=0.0 duration=2.5
-        # fade_channel parcan_l at 0.720 for 3.0 channel=[blue] start_value=1.0 end_value=0.0
-        # flash parcan_r at 1.045 channels=[blue] initial_value=1.0 end_value=0.0 duration=1.8
-        # fade_channel parcan_pl at 1.370 for 2.5 channel=[blue] start_value=1.0 end_value=0.0
-        # flash parcan_pr at 1.695 channels=[blue] initial_value=1.0 end_value=0.0 duration=3.7
-        # ```        
+        """Parse the last response and extract action commands."""
         
         if not self._last_response:
-            print("No response to parse")
+            print("⚠️ No response to parse")
             return
             
         # Extract actions block from the response
         actions_match = re.search(r'```actions\s*\n(.*?)\n```', self._last_response, re.DOTALL)
         if not actions_match:
-            print("No actions block found in response")
+            print("⚠️ No actions block found in response")
             return
             
         actions_text = actions_match.group(1).strip()
         if not actions_text:
-            print("Empty actions block")
+            print("⚠️ Empty actions block")
             return
             
         action_lines = [line.strip() for line in actions_text.split('\n') if line.strip()]
         
         if not action_lines:
-            print("No action commands found")
+            print("⚠️ No action commands found")
             return
             
         # Find time range to clear existing actions
