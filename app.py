@@ -106,6 +106,6 @@ print("\n## EffectTranslator")
 print(f" - Model: {effect_translator.model}")
 effect_translator.parse_plan_entry(plan_entry)
 
-# asyncio.run(effect_translator.run_async())
+asyncio.run(effect_translator.run_async())
 
 
