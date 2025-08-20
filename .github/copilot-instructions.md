@@ -1,48 +1,60 @@
-# Copilot instructions for ai-light-show_agents
+# Copilot instructions for ai-light_show_agents
 
-Purpose: give an AI coding agent the minimal, actionable knowledge to be productive in this repo.
+Purpose
+-------
+Provide an automated contributor/agent guide with minimal, concrete steps to be productive in this repository.
 
 High-level architecture
-- `app.py` is a small CLI-ish entry that wires core pieces (AppData, Agent, EffectTranslator, DMXCanvas) and demonstrates usage.
-- `models/` contains domain models: `app_data.py` (singleton AppData), `song/`, `lighting/` (Plan/PlanEntry), `fixtures/` (FixtureList). Data lives in `data/` and `songs/`.
-- `agents/` contains AI-facing classes and Jinja prompts: `agents/agent.py` (base Agent), `agents/effect_tramslator/effect_translator.py` (EffectTranslator), and `agents/prompts/*.j2` templates.
+-----------------------
+- `app.py` is a small CLI-style example that wires core pieces (AppData, Agent, EffectTranslator, DMXCanvas) and demonstrates repository usage.
+- `models/` contains domain models: `app_data.py` (singleton AppData), `song/`, `lighting/` (Plan/PlanEntry), and fixtures. Data lives in `data/` and `songs/`.
+- `agents/` contains AI-facing classes and Jinja prompts: `agents/agent.py` (base Agent), `agents/effect_tramslator/effect_translator.py` (EffectTranslator), and `agents/prompts/*.j2` templates used to build prompts.
 - `models/dmx/dmx_canvas.py` holds the DMX frame buffer used to render lighting output (512-channel bytearrays keyed by time).
-- Integration: an external Ollama LLM service (docker-compose: `llm-service`) on `http://localhost:11434` is expected for inference.
+- Integration with an LLM service (configured via Docker Compose as `llm-service`) is expected at `http://localhost:11434`.
 
-Key files to inspect (examples)
-- `app.py` — shows a canonical run: load song, print fixtures, create Agent and EffectTranslator, start DMXCanvas.
-- `models/app_data.py` — AppData singleton: base_folder, prompts_folder, fixtures, plan, logs_folder.
-- `agents/agent.py` — parse_context() template convention and `run_async()` which streams to Ollama `/api/generate`.
-- `agents/effect_tramslator/effect_translator.py` — builds actions_reference from fixtures, calls parse_context, writes context to logs.
-- `agents/prompts/*.j2` — edit these to change agent prompts (template variables: `agent`, `song`, `fixtures`, plus extras passed by callers).
-- `models/dmx/dmx_canvas.py` — DMX frame logic: 512 channels, fps default 50, frames keyed by rounded floats.
+Key files to inspect
+--------------------
+- `app.py` — canonical usage: load song, print fixtures, create Agent and EffectTranslator, render the DMX canvas, and run an example flow.
+- `models/app_data.py` — the AppData singleton. Preferred access point for data folders, fixtures, loaded `Song`, `Plan`, `ActionList`, and `DMXCanvas` instances.
+- `agents/agent.py` — base Agent implementation: builds prompt context from Jinja templates and calls the LLM (Ollama) streaming API. Inspect `parse_context()` and `run_async()`.
+- `agents/effect_tramslator/effect_translator.py` — translates plan entries into action commands. Uses `get_actions_reference()` and `parse_plan_entry()` to prepare prompts.
+- `agents/prompts/*.j2` — edit these to control how agents reason. Template variables: `agent`, `song`, `fixtures`, plus any extras passed by callers.
+- `models/dmx/dmx_canvas.py` — DMX canvas logic: 512 channels, FPS default 50, frames keyed to rounded floats. Rendering helpers and frame accessors are here.
 
-Project-specific conventions and patterns
-- Template naming: `Agent.parse_context` converts a class name into a template filename by turning CamelCase -> snake_case and appending `.j2`. Example: `EffectTranslator` -> `effect_translator.j2` (see `agents/agent.py`).
-- Template vars: `agent` is always available in templates. `Agent.parse_context` injects `song` and `fixtures` unless explicitly provided.
-- Logs: agents write files to `app_data.logs_folder` using `utils.write_file`. Typical filenames: `effect_translator.context.txt` and `EffectTranslator.response.txt`.
-- Models/API: the agent uses Ollama endpoints: `GET /api/tags` to list models and `POST /api/generate` for streaming responses; default server_url is `http://localhost:11434` and default model used in code is `gpt-4o-mini` (EffectTranslator overrides to `cogito:8b`).
-- DMX indexing: `DMXCanvas` stores frames as `bytearray(512)` and uses 0-based indexing in code. When generating DMX channel values, validate whether other systems expect 1-based channels.
-- Time-keyed frames: frames keys are floats rounded to 2 decimals (see `init_canvas`), and `get_frame()` returns the nearest previous frame when an exact timestamp is missing.
-- NEVER read Json files directly, always use the provided data access methods in the AppData singleton.
-- ALWAYS use public properties of AppData and its contained models. Do not use internal _variables or __private_variables.
+Conventions and important rules
+-----------------------------
+- Template naming: `Agent.parse_context` converts a class name to snake_case and appends `.j2`. Example: `EffectTranslator` -> `effect_translator.j2`.
+- Template variables: `agent` is always available. `parse_context()` will inject `song` and `fixtures` unless callers provide alternatives.
+- Persistence: action lists are stored as JSON files named `{song_name}.actions.json` under the AppData `data_folder`.
+- DO NOT read JSON files directly in code — use AppData helpers and public properties (`AppData().data_folder`, `AppData().song`, etc.).
+- DMX frames are 0-indexed in code (512 channels). Confirm external hardware expectations before changing indexing.
 
 Developer workflows (concrete commands)
-- Start the LLM service (uses the included compose file): run `docker-compose up -d llm-service` from the repo root to start Ollama as configured in `docker-compose.yml`.
-- Verify available models: either call `Agent().get_models()` in a short script or hit `http://localhost:11434/api/tags`.
-- Run the example CLI: `python app.py` (ensure your Python environment has required libs: jinja2, aiohttp).
-- Where to look for outputs: generated logs go to `logs/` and example outputs referenced in `app.py` include `effect_translator.context.txt` and the DMX canvas printout.
+--------------------------------------
+- Start the LLM service used by the agents (Ollama):
+  - From the repo root run: `docker-compose up -d llm-service`
+- Verify available models: call `Agent().get_models()` in a short script, or GET `http://localhost:11434/api/tags`.
+- Run the example CLI: `python app.py` (ensure your Python environment has required libs such as `jinja2` and `aiohttp`).
 
-Integration points & external deps
-- Ollama LLM service (docker image `ollama/ollama`) — docker-compose file maps port 11434. Expected to be running locally.
-- Local data files: `data/*.json|.pkl` (plan/beat/chord/meta), `songs/*.mp3`, and `fixtures/fixtures.json` drive behavior. Agents build prompts from those inputs.
+Where outputs are written
+------------------------
+- Generated logs: `logs/` (examples include `effect_translator.context.txt` and `EffectTranslator.response.txt`).
+- Persistent action lists: `data/{song_name}.actions.json`.
 
-Quick tips for making changes safely
-- To change prompt structure, edit `agents/prompts/<template>.j2` and test by running the small flow in `app.py` or calling `EffectTranslator().parse_plan_entry(...)` and then `EffectTranslator().run()`.
-- When producing DMX frames, respect 0-based channel indexing and the 512-channel frame size.
-- Add new agent classes by subclassing `Agent` and providing a matching prompt template named with the snake_case rule.
+Integration points & external dependencies
+-----------------------------------------
+- Ollama LLM service (docker image `ollama/ollama`) — configured in `docker-compose.yml`, exposed on port 11434. The repo expects this to be available locally for agent runs.
+- Local content: `data/*.json|.pkl` (plan/beat/chord/meta), `songs/*.mp3`, and `fixtures/fixtures.json` drive prompt construction and rendering.
 
-What I looked for and merging notes
-- No existing `.github/copilot-instructions.md`, `AGENT.md`, or similar agent-guides were found in the repo — this file is new.
+Quick tips for safe changes
+--------------------------
+- To modify agent prompts, edit `agents/prompts/<template>.j2` and test via `EffectTranslator().parse_plan_entry(...)` followed by `EffectTranslator().run()`.
+- Respect DMX channel indexing and 512-channel frame size when producing frames.
+- To add a new Agent subclass, follow the naming convention and add a corresponding prompt template in `agents/prompts/`.
+
+Troubleshooting notes
+---------------------
+- If `python app.py` fails with `ModuleNotFoundError` for `aiohttp`, install dependencies in your virtualenv (`pip install aiohttp jinja2`) or use the project's recommended environment.
+- If the Ollama server is unreachable, ensure Docker is running and `docker-compose up -d llm-service` completed successfully.
 
 If anything here is unclear or you want the file tuned (more examples, troubleshooting steps, or CI/test instructions), tell me which area to expand and I will iterate.
