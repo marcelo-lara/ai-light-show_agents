@@ -3,14 +3,16 @@ import os
 import time
 from typing import Dict
 from models.dmx.dmx_canvas import DMXCanvas
-from models.lighting.actionList import ActionEntry
-from utils import write_file
+from models.lighting.action_list import ActionEntry
 from agents.effect_tramslator.effect_translator import EffectTranslator
 from agents.agent import Agent
 from models.app_data import AppData
 from models.lighting.plan import PlanEntry
 song_name = "born_slippy"
 
+def print_canvas():
+    print(dmx_canvas.get_canvas_log(end_time=0.1, last_channel=40))    
+    
 ####################################################################################################################################
 os.system('clear')
 app_data = AppData()
@@ -49,7 +51,7 @@ print(f"   {app_data.song.get_beats_array(plan_entry.start, plan_entry.end)}")
 ## Start DMX Canvas
 print("\n## DMX Canvas")
 dmx_canvas = app_data.dmx_canvas
-print(dmx_canvas.get_canvas_log(end_time=0.1, last_channel=40))
+print_canvas()
 
 ####################################################################################################################################
 # Test Fixture render
@@ -63,7 +65,7 @@ fixture.fade_channel(['red'],
                         start_value=0.1,
                         end_value=0.9
                      )
-print(dmx_canvas.get_canvas_log(end_time=0.1, last_channel=40))
+print_canvas()
 
 ####################################################################################################################################
 print("\n## ActionList")
@@ -77,14 +79,19 @@ action_list.add_action(ActionEntry(
     parameters={
         'start_time': 0.0,
         'duration': 1.0,
-        'color': 'blue',
-        'intensity': 1.0
+        'channels': ['blue'],
+        'wrong_param': 0.5,
+        'initial_value': 1.0
     }
 ))
 
-for action in action_list:
-    print(f" - {action}")
+dmx_canvas.init_canvas()
+print_canvas()
 
+app_data.fixtures.render_actions(action_list=app_data.action_list.action_list)
+
+print("-- rendered actions")
+print_canvas()
 ####################################################################################################################################
 agent = Agent()
 print("\n## Agents")

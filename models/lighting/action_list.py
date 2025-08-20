@@ -27,6 +27,7 @@ from pathlib import Path
 
 class ActionEntry:
     """Represents a single lighting action/effect for a fixture.
+    This Action must be rendered using the fixture action handler.
 
     Attributes
     ----------

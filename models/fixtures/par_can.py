@@ -31,7 +31,9 @@ class RgbParCan(Fixture):
         """
         Render the flash action for the RGB Par Can fixture.
         """
-        
+        if type(channels) is str:
+            channels = [channels]
+
         # If no channels are specified, default to all three RGB channels
         if channels == ['white'] or channels == ['rgb']:
             channels = ['red', 'green', 'blue']

@@ -1,6 +1,8 @@
 from __future__ import annotations
 import json
 from typing import List
+
+from models.lighting.action_list import ActionEntry
 from .fixture import Fixture
 from .moving_head import MovingHead
 from .par_can import RgbParCan
@@ -64,6 +66,39 @@ class FixtureList:
     def arm_all_fixtures(self):
         for fixture in self._fixtures:
             fixture.set_arm(True)
+
+    def get_fixture_by_id(self, fixture_id: str) -> Fixture | None:
+        return next((f for f in self._fixtures if f.id == fixture_id), None)
+
+    def render_actions(self, action_list: List[ActionEntry]) -> bool:
+        from ..app_data import AppData
+        app_data = AppData()
+        app_data.dmx_canvas.init_canvas()
+
+        self.arm_all_fixtures()
+        for action in action_list:
+            fixture = self.get_fixture_by_id(action.fixture_id)
+            if not fixture:
+                print(f"❌ render_actions: Could not find fixture_id {action.fixture_id}")
+                continue
+
+            fixture_action = next((a for a in fixture.actions if a.name == action.action), None)
+            if not fixture_action:
+                print(f"❌ render_actions: Could not find action '{action.action}' on fixture {fixture.name}")
+                continue
+
+            _action_params = [a.name for a in fixture_action.parameters]
+
+            _handler_params = {}
+            for param in action.parameters.keys():
+                if param in _action_params:
+                    _handler_params[param] = action.parameters[param]
+                    continue
+                print(f"⚠️ render_actions: Could not find parameter '{param}' for action '{action.action}' on fixture {fixture.name}")
+
+            fixture_action.handler(**_handler_params)
+
+        return True
 
     def __iter__(self):
         return iter(self._fixtures)
