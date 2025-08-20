@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import Any, Dict, List
 
-from models.fixtures.meta.action import Action
-from models.fixtures.meta.action_parameter import ActionParameter
+from .meta.action import Action
+from .meta.action_parameter import ActionParameter
 from .fixture import Fixture
 from .meta.meta import Meta
 from .meta.position import Position

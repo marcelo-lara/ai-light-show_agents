@@ -2,11 +2,11 @@ import os
 from typing import List, Optional
 from pathlib import Path
 
-from models.dmx.dmx_canvas import DMXCanvas
-from models.fixtures.fixture_list import FixtureList
-from models.lighting.action_list import ActionList
-from models.lighting.plan import Plan
-from models.song.song import Song
+from .dmx.dmx_canvas import DMXCanvas
+from .fixtures.fixture_list import FixtureList
+from .lighting.action_list import ActionList
+from .lighting.plan import Plan
+from .song.song import Song
 
 class AppData:
     _instance = None
@@ -23,15 +23,15 @@ class AppData:
         
         self._initialized = True
 
-        # determine base folder
-        self._base_folder = Path(os.path.abspath(__file__)).parent.parent
+        # determine base folder - go up two levels from backend/models to get to project root
+        self._base_folder = Path(os.path.abspath(__file__)).parent.parent.parent
         
         # setup folders
         self._data_folder = os.path.join(self._base_folder, "data")
         self._mp3_folder = os.path.join(self._base_folder, "songs")
         self._logs_folder = os.path.join(self._base_folder, "logs")
-        self._fixtures_file = os.path.join(self._base_folder, "fixtures", "fixtures.json")
-        self._prompts_folder = os.path.join(self._base_folder, "agents", "prompts")
+        self._fixtures_file = os.path.join(self._base_folder, "backend", "fixtures", "fixtures.json")
+        self._prompts_folder = os.path.join(self._base_folder, "backend", "agents", "prompts")
 
         # load fixtures
         self._fixtures = FixtureList(self._fixtures_file)
