@@ -30,7 +30,10 @@ print(f"Using base folder: {song.base_folder} -> song: {song.mp3_file}\n")
 
 # Extract chroma and MFCC features from audio stems
 
+## try https://pypi.org/project/music-mood-analysis/
+
 ## Song Analysis ##############################
+#explore https://pypi.org/search/?q=audio&o=&c=Topic+%3A%3A+Multimedia+%3A%3A+Sound%2FAudio+%3A%3A+Analysis
 
 # Find key moments in the song
 
