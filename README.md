@@ -9,10 +9,10 @@ This repository provides a small toolkit for planning and rendering DMX lighting
 
 Key components
 --------------
-- `app.py` — example CLI demonstrating a canonical flow: load song, display fixtures, prepare a plan entry, create an `EffectTranslator`, and render the DMX canvas.
-- `models/` — domain models for song, lighting, fixtures, DMX canvas, and action lists.
-- `agents/` — AI-facing classes and Jinja prompt templates. `Agent` provides the base logic and streaming call to the Ollama server. `EffectTranslator` prepares prompts to translate plan entries into `ActionEntry` items.
-- `agents/prompts/` — Jinja2 prompt templates used to build agent contexts. Editing these changes how the AI reasons about effects.
+- `backend/create_show.py` — example CLI demonstrating a canonical flow: load song, display fixtures, prepare a plan entry, create an `EffectTranslator`, and render the DMX canvas.
+- `backend/models/` — domain models for song, lighting, fixtures, DMX canvas, and action lists.
+- `backend/agents/` — AI-facing classes and Jinja prompt templates. `Agent` provides the base logic and streaming call to the Ollama server. `EffectTranslator` prepares prompts to translate plan entries into `ActionEntry` items.
+- `backend/agents/prompts/` — Jinja2 prompt templates used to build agent contexts. Editing these changes how the AI reasons about effects.
 - `data/` and `songs/` — test data and audio files used by the example flow.
 
 Quick start
@@ -45,7 +45,7 @@ python app.py
 
 Files and conventions
 ---------------------
-- Prompts: agent prompt templates live at `agents/prompts/*.j2`. `Agent.parse_context()` converts a class name to a template filename using a camelCase->snake_case rule.
+- Prompts: agent prompt templates live at `backend/agents/prompts/*.j2`. `Agent.parse_context()` converts a class name to a template filename using a camelCase->snake_case rule.
 - Persisted actions: action lists are saved as JSON files named `{song_name}.actions.json` under the `data/` folder.
 - DMX frames: `DMXCanvas` stores frames as `bytearray(512)`, keyed by float timestamps rounded to 2 decimals.
 
@@ -56,15 +56,11 @@ Development notes
 
 Testing & sanity checks
 -----------------------
-- The repository has no formal unit test suite yet. Use `app.py` as the canonical smoke test.
+- The repository has no formal unit test suite yet. Use `backend/create_show.py` as the canonical smoke test.
 - Before opening a PR, ensure `python app.py` imports fine in your environment (install `aiohttp` and `jinja2` if needed).
 
 Contributing
 ------------
-- Edit prompts under `agents/prompts/` to change agent behavior.
+- Edit prompts under `backend/agents/prompts/` to change agent behavior.
 - Add new agent classes by subclassing `Agent` and adding a matching prompt template named with the snake_case rule.
 - Use `AppData()` to access shared data and avoid direct file reads.
-
-Contact
--------
-Open issues or PRs in the repository for questions, bug reports, or feature requests.
