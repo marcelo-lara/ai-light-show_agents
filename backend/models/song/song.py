@@ -61,6 +61,10 @@ class Song:
 
     @property
     def mp3_file(self) -> Optional[str]:
+        if not self._mp3_file:
+            self._mp3_file = self.base_folder + "/songs/" + self._name + ".mp3"
+            if not os.path.exists(self._mp3_file):
+                raise ValueError(f"MP3 file '{self._mp3_file}' does not exist")
         return self._mp3_file
 
     @property
