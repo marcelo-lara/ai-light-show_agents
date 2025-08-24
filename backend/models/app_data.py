@@ -6,7 +6,7 @@ from .dmx.dmx_canvas import DMXCanvas
 from .fixtures.fixture_list import FixtureList
 from .lighting.action_list import ActionList
 from .lighting.plan import Plan
-from .song.song import Song
+from common.models.song.song import Song
 
 class AppData:
     _instance = None

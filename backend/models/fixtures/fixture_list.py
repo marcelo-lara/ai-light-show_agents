@@ -2,7 +2,7 @@ from __future__ import annotations
 import json
 from typing import List
 
-from models.lighting.action_list import ActionEntry
+from ..lighting.action_list import ActionEntry
 from .fixture import Fixture
 from .moving_head import MovingHead
 from .par_can import RgbParCan

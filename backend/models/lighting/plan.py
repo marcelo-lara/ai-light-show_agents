@@ -14,13 +14,13 @@ class PlanEntry:
 class Plan:
     def __init__(self):
         self.plans = []
-        from models.app_data import AppData
+        from ..app_data import AppData
         self._data_folder = AppData().data_folder
         self._plan_file = ''
 
     def _actions_file(self) -> str: 
         """Return the path to the actions file."""
-        from models.app_data import AppData
+        from ..app_data import AppData
         return str(Path(self._data_folder) / f"{AppData().song_name}.plan.json")
 
     def load_plan(self):

@@ -1,9 +1,9 @@
 import re
-from models.app_data import AppData
-from agents.agent import Agent
-from models.lighting.plan import PlanEntry
-from models.lighting.action_list import ActionEntry
-from utils import write_file
+from ...models.app_data import AppData
+from ..agent import Agent
+from ...models.lighting.plan import PlanEntry
+from ...models.lighting.action_list import ActionEntry
+from ...utils import write_file
 
 class EffectTranslator(Agent):
     def __init__(self, model:str = "cogito:8b"):

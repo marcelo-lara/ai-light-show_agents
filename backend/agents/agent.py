@@ -4,8 +4,8 @@ import asyncio
 import aiohttp
 from urllib import request
 from jinja2 import Environment, FileSystemLoader
-from models.app_data import AppData
-from utils import write_file
+from ..models.app_data import AppData
+from ..utils import write_file
 
 class Agent:
     def __init__(self, model:str = "gpt-4o-mini", server_url: str = "http://localhost:11434"):

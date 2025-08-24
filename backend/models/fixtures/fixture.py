@@ -84,7 +84,7 @@ class Fixture:
             start_time: Time when the channel value will be set OR beginning of the song.
             duration: Duration to hold the value (default: remain until the end of the song).
         '''
-        from models.dmx.dmx_canvas import DMXCanvas
+        from ..dmx.dmx_canvas import DMXCanvas
         dmx_canvas:DMXCanvas = DMXCanvas()
         channel_numbers = [self.channels[c] for c in channel]
         if explicit_value >= 0:
@@ -101,7 +101,7 @@ class Fixture:
 
     def fade_channel(self, channel: List[str], start_value: float = 1.0, end_value: float = 0.0, start_time: float = 0, duration: float = 0):
         '''Fade the value of a channel from start_value to end_value over the specified time range.'''
-        from models.dmx.dmx_canvas import DMXCanvas
+        from ..dmx.dmx_canvas import DMXCanvas
         dmx_canvas:DMXCanvas = DMXCanvas()
 
         channel_numbers = [self.channels[c] for c in channel]

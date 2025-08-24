@@ -110,7 +110,7 @@ class ActionList:
         self.action_list: list[ActionEntry] = []
         self._data_folder = data_folder
         if self._data_folder == '':
-            from models.app_data import AppData
+            from ..app_data import AppData
             self._data_folder = AppData().data_folder
 
     def _actions_file(self) -> str:
@@ -119,7 +119,7 @@ class ActionList:
         The filename is "{song_name}.actions.json" inside the configured
         data folder.
         """
-        from models.app_data import AppData
+        from ..app_data import AppData
         return str(Path(self._data_folder) / f"{AppData().song_name}.actions.json")
 
     def add_action(self, action: ActionEntry) -> None:
