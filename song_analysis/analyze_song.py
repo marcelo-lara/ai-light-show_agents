@@ -6,13 +6,14 @@ song_name = "born_slippy"
 analysis_context = AnalysisContext()
 
 song = Song(name=song_name, base_folder=str(analysis_context.base_folder))
-
 print(f"Using base folder: {song.base_folder} -> song: {song.mp3_file}\n")
 
 
 ## Features Extraction #######################
 
 # Split audio stems
+from services.audio_stem_splitter import split_audio_stems
+split_audio_stems(song.mp3_file, str(analysis_context.stems_folder))
 
 # Extract beats and BPM from drums stem
 

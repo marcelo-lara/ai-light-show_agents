@@ -60,7 +60,7 @@ class Song:
         return self._bpm
 
     @property
-    def mp3_file(self) -> Optional[str]:
+    def mp3_file(self) -> str:
         if not self._mp3_file:
             self._mp3_file = self.base_folder + "/songs/" + self._name + ".mp3"
             if not os.path.exists(self._mp3_file):
