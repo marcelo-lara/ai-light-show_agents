@@ -1,14 +1,19 @@
 import asyncio
 import os
+import sys
 import time
 from typing import Dict
-from .models.dmx.dmx_canvas import DMXCanvas
-from .models.lighting.action_list import ActionEntry
-from .agents.effect_tramslator.effect_translator import EffectTranslator
-from .agents.agent import Agent
-from .models.app_data import AppData
-from .models.lighting.plan import PlanEntry
-from .utils import read_file
+
+# Add project root to path for absolute imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from backend.models.dmx.dmx_canvas import DMXCanvas
+from backend.models.lighting.action_list import ActionEntry
+from backend.agents.effect_tramslator.effect_translator import EffectTranslator
+from backend.agents.agent import Agent
+from backend.models.app_data import AppData
+from backend.models.lighting.plan import PlanEntry
+from backend.utils import read_file
 song_name = "born_slippy"
 
 def print_canvas():
