@@ -1,21 +1,26 @@
 from common.models.song.song import Song
-from song_analysis.models.analysis_context import AnalysisContext
+from song_analysis.models.analysis import Analysis
 
 ## Setup
 song_name = "born_slippy"
-analysis_context = AnalysisContext()
+analysis = Analysis()
 
-song = Song(name=song_name, base_folder=str(analysis_context.base_folder))
+song = Song(name=song_name, base_folder=str(analysis.base_folder))
 print(f"Using base folder: {song.base_folder} -> song: {song.mp3_file}\n")
 
 
 ## Features Extraction #######################
 
 # Split audio stems
+print("\n## Splitting audio stems...")
 from services.audio_stem_splitter import split_audio_stems
-split_audio_stems(song.mp3_file, str(analysis_context.stems_folder))
+analysis.stems_files = split_audio_stems(song.mp3_file, str(analysis.stems_folder))
 
 # Extract beats and BPM from drums stem
+print("\n## Extracting beats from stems...")
+from services.beat_times import extract_beats
+drum_beats, drum_downbeats = extract_beats(analysis.stems_files["drums"])
+main_beats, main_downbeats = extract_beats(song.mp3_file)
 
 # Extract spectrograms from audio stems
 

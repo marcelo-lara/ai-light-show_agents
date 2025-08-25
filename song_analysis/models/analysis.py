@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-class AnalysisContext:
+class Analysis:
     """Singleton context object for song analysis.
 
     Uses a class-level _instance and guards __init__ so initialization runs once.
@@ -21,6 +21,15 @@ class AnalysisContext:
         # determine base folder - go up two levels from backend/models to get to project root
         self._base_folder = Path(os.path.abspath(__file__)).parent.parent.parent
         self._initialized = True
+        self._stems_files = {}
+
+    @property
+    def stems_files(self):
+        return self._stems_files
+
+    @stems_files.setter
+    def stems_files(self, stems_files):
+        self._stems_files = stems_files
 
     @property
     def base_folder(self):
