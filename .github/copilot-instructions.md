@@ -28,6 +28,8 @@ Conventions and important rules
 - Persistence: action lists are stored as JSON files named `{song_name}.actions.json` under the AppData `data_folder`.
 - DO NOT read JSON files directly in code — use AppData helpers and public properties (`AppData().data_folder`, `AppData().song`, etc.).
 - DMX frames are 0-indexed in code (512 channels). Confirm external hardware expectations before changing indexing.
+- DO NOT keep backward compatibility in mind when making changes.
+- DO NOT introduce fallback variants unless explicitly requested.
 
 Developer workflows (concrete commands)
 --------------------------------------

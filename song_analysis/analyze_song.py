@@ -1,11 +1,12 @@
 from common.models.song.song import Song
 from song_analysis.models.analysis import Analysis
+from song_analysis.services.audio_features import extract_audio_features
 
 ## Setup
-song_name = "born_slippy"
 analysis = Analysis()
+analysis.song_name = "born_slippy"
 
-song = Song(name=song_name, base_folder=str(analysis.base_folder))
+song = Song(name=analysis.song_name, base_folder=str(analysis.base_folder))
 print(f"Using base folder: {song.base_folder} -> song: {song.mp3_file}\n")
 
 
@@ -22,9 +23,17 @@ from services.beat_times import extract_beats
 drum_beats, drum_downbeats = extract_beats(analysis.stems_files["drums"])
 main_beats, main_downbeats = extract_beats(song.mp3_file)
 
-# Extract spectrograms from audio stems
+# Extract audio features from audio stems
+print("\n## Extracting audio features from stems...")
+main_features = extract_audio_features(song.mp3_file)
+stem_features = {}
+for stem, path in analysis.stems_files.items():
+    print(f" - Extracting audio features from {stem}")
+    features = extract_audio_features(path)
+    stem_features[stem] = features
 
-# Extract chroma and MFCC features from audio stems
+# Extract audio features from audio stems
+print("\n## Extracting audio features from stems...")
 
 ## try https://pypi.org/project/music-mood-analysis/
 
