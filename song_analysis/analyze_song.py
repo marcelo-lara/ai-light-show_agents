@@ -1,47 +1,70 @@
-from common.models.song.song import Song
-from song_analysis.models.analysis import Analysis
-from song_analysis.services.audio_features import extract_audio_features
+from __future__ import annotations
+import argparse
+import json
+import os
+import sys
+from typing import Dict, Any
 
-## Setup
-analysis = Analysis()
-analysis.song_name = "born_slippy"
+def _import_funcs():
+    # Absolute imports assuming package installed / run from project root
+    from song_analysis.audio_io import load_audio  # type: ignore
+    from song_analysis.stems import ensure_stems  # type: ignore
+    from song_analysis.rhythm import estimate_tempo_and_beats, detect_percussive_onsets  # type: ignore
+    from song_analysis.harmony import estimate_key  # type: ignore
+    from song_analysis.vocals import detect_vocals_activity  # type: ignore
+    from song_analysis.energy import compute_energy_curve  # type: ignore
+    from song_analysis.structure import segment_structure  # type: ignore
+    from song_analysis.events import detect_events  # type: ignore
+    from song_analysis.schema import SectionEntry, EventEntry  # type: ignore
+    return locals()
 
-song = Song(name=analysis.song_name, base_folder=str(analysis.base_folder))
-print(f"Using base folder: {song.base_folder} -> song: {song.mp3_file}\n")
+def analyze(mp3_path: str, stems_folder: str, out_path: str) -> Dict[str, Any]:
+    funcs = _import_funcs()
+    funcs['ensure_stems'](mp3_path, stems_folder)
+    y, sr = funcs['load_audio'](mp3_path)
+    tempo, beats = funcs['estimate_tempo_and_beats'](y, sr)
+    key = funcs['estimate_key'](y, sr)
+    energy_curve = funcs['compute_energy_curve'](y, sr)
+    sections = funcs['segment_structure'](y, sr)
+    drums_info = funcs['detect_percussive_onsets'](y, sr)
+    vocal_sections, pitch_contour = funcs['detect_vocals_activity'](os.path.join(stems_folder, 'vocals.wav'))
+    events = funcs['detect_events'](energy_curve, beats)
+    data: Dict[str, Any] = {
+        'tempo': round(tempo) if tempo else 0,
+        'key': key,
+        'structure': [s.to_dict() for s in sections],
+        'beats': beats,
+        'drums': drums_info,
+        'vocals': {
+            'active_sections': vocal_sections,
+            'pitch_contour': pitch_contour
+        },
+        'energy_curve': energy_curve,
+        'events': [e.to_dict() for e in events]
+    }
+    with open(out_path, 'w') as f:
+        json.dump(data, f, indent=2)
+    return data
 
+def main(argv=None):
+    parser = argparse.ArgumentParser(description='Analyze song and extract features for light show generation.')
+    parser.add_argument('--song', required=True)
+    parser.add_argument('--stems', required=True)
+    parser.add_argument('--out', required=True)
+    parser.add_argument('--no-split', action='store_true')
+    parser.add_argument('--stems-model', choices=['2stems','4stems'], default='4stems')
+    args = parser.parse_args(argv)
+    # Configure stems flags
+    from song_analysis import stems as _stems_mod  # type: ignore
+    _stems_mod.AUTO_SPLIT_ENABLED = not args.no_split
+    _stems_mod.STEMS_MODEL = args.stems_model
+    result = analyze(args.song, args.stems, args.out)
+    print(json.dumps(result, indent=2)[:2000])
 
-## Features Extraction #######################
-
-# Split audio stems
-print("\n## Splitting audio stems...")
-from services.audio_stem_splitter import split_audio_stems
-analysis.stems_files = split_audio_stems(song.mp3_file, str(analysis.stems_folder))
-
-# Extract beats and BPM from drums stem
-print("\n## Extracting beats from stems...")
-from services.beat_times import extract_beats
-drum_beats, drum_downbeats = extract_beats(analysis.stems_files["drums"])
-main_beats, main_downbeats = extract_beats(song.mp3_file)
-
-# Extract audio features from audio stems
-print("\n## Extracting audio features from stems...")
-main_features = extract_audio_features(song.mp3_file)
-stem_features = {}
-for stem, path in analysis.stems_files.items():
-    print(f" - Extracting audio features from {stem}")
-    features = extract_audio_features(path)
-    stem_features[stem] = features
-
-# Extract audio features from audio stems
-print("\n## Extracting audio features from stems...")
-
-## try https://pypi.org/project/music-mood-analysis/
-
-## Song Analysis ##############################
-#explore https://pypi.org/search/?q=audio&o=&c=Topic+%3A%3A+Multimedia+%3A%3A+Sound%2FAudio+%3A%3A+Analysis
-
-# Find key moments in the song
-
-# Cluster similar sections (repetitive patterns in stems)
-
-# Analyze song structure (sections, transitions, drops, etc.)
+if __name__ == '__main__':  # pragma: no cover
+    result = analyze(
+        mp3_path="/home/darkangel/ai-light-show_agents/songs/born_slippy.mp3",
+        stems_folder="/home/darkangel/ai-light-show_agents/stems",
+        out_path="/home/darkangel/ai-light-show_agents/data/born_slippy.analysis.json"
+    )
+    print(json.dumps(result, indent=2)[:2000])

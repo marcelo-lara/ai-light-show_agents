@@ -2,3 +2,6 @@ librosa
 spleeter
 torch
 BeatNet
+essentia
+numpy
+soundfile

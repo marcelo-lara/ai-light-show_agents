@@ -33,6 +33,7 @@ Conventions and important rules
 
 Developer workflows (concrete commands)
 --------------------------------------
+- ALWAYS run python in the "ai-light" context (activate with `pyenv activate ai-light`)
 - Start the LLM service used by the agents (Ollama):
   - From the repo root run: `docker-compose up -d llm-service`
 - Verify available models: call `Agent().get_models()` in a short script, or GET `http://localhost:11434/api/tags`.
