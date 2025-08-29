@@ -42,6 +42,10 @@ class Plan:
         with open(plan_path, 'w') as f:
             json.dump([entry.__dict__ for entry in self.plans], f, indent=2)
 
+    def clear_plan(self):
+        """Clear all plans."""
+        self.plans = []
+
     def add_plan(self, plan: PlanEntry):
         """Add a PlanEntry to the list of plans."""
         self.plans.append(plan)

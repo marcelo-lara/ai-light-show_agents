@@ -1,7 +1,7 @@
 import os
 from typing import List, Optional
 from pathlib import Path
-
+import json
 from .dmx.dmx_canvas import DMXCanvas
 from .fixtures.fixture_list import FixtureList
 from .lighting.action_list import ActionList
@@ -38,6 +38,7 @@ class AppData:
         self._plan = Plan()
         self._action_list = ActionList()
         self._dmx_canvas = DMXCanvas()
+        self._song_analysis = {}
         
     def load_song(self, song_name: str):
         self._song = Song(song_name, base_folder=str(self._base_folder))
@@ -53,6 +54,16 @@ class AppData:
     @property
     def data_folder(self) -> Path:
         return Path(self._data_folder)
+
+    @property
+    def song_analysis(self) -> dict:
+        if self._song_analysis is None:
+            # load json
+            _file = os.path.join(self._data_folder, f"{self.song_name}.analysis.json")
+            if os.path.exists(_file):
+                with open(_file, "r") as f:
+                    self._song_analysis = json.load(f)
+        return self._song_analysis
 
     @property
     def logs_folder(self) -> Path:

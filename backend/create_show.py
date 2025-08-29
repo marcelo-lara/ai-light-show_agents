@@ -7,6 +7,7 @@ from typing import Dict
 # Add project root to path for absolute imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from backend.agents.lighting_planner.lighting_planner import LightingPlanner
 from backend.models.dmx.dmx_canvas import DMXCanvas
 from backend.models.lighting.action_list import ActionEntry
 from backend.agents.effect_tramslator.effect_translator import EffectTranslator
@@ -106,15 +107,22 @@ print(f" - Available Models:")
 for model in agent.get_models():
     print(f"   - {model}")
 
+## 2. Create Lighting Plan
+lighting_planner = LightingPlanner()
+lighting_planner.parse_song_context("born_slippy")
+lighting_planner.run()
+app_data.plan.clear_plan()
+lighting_planner.parse_response()
+
 # 3. Translate Effects into Actions
-effect_translator = EffectTranslator()
-print("\n## EffectTranslator")
-print(f" - Model: {effect_translator.model}")
-effect_translator.parse_plan_entry(plan_entry)
+# effect_translator = EffectTranslator()
+# print("\n## EffectTranslator")
+# print(f" - Model: {effect_translator.model}")
+# effect_translator.parse_plan_entry(plan_entry)
 
 
 
-effect_translator._last_response = read_file(str(app_data.logs_folder / "EffectTranslator.response.txt"))
-#asyncio.run(effect_translator.run_async())
-print(effect_translator._last_response)
-effect_translator.parse_response()
+# effect_translator._last_response = read_file(str(app_data.logs_folder / "EffectTranslator.response.txt"))
+# #asyncio.run(effect_translator.run_async())
+# print(effect_translator._last_response)
+# effect_translator.parse_response()
