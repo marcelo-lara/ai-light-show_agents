@@ -28,7 +28,7 @@ def analyze(mp3_path: str, stems_folder: str, out_path: str) -> Dict[str, Any]:
     sections = funcs['segment_structure'](y, sr)
     drums_info = funcs['detect_percussive_onsets'](y, sr, os.path.join(stems_folder, 'drums.wav'))
     vocal_sections, pitch_contour = funcs['detect_vocals_activity'](os.path.join(stems_folder, 'vocals.wav'))
-    events = funcs['detect_events'](energy_curve, beats)
+    events = funcs['detect_events'](energy_curve, beats, sr)
     data: Dict[str, Any] = {
         'tempo': round(tempo) if tempo else 0,
         'key': key,
@@ -67,4 +67,4 @@ if __name__ == '__main__':  # pragma: no cover
         stems_folder="/home/darkangel/ai-light-show_agents/stems",
         out_path="/home/darkangel/ai-light-show_agents/data/born_slippy.analysis.json"
     )
-    print(json.dumps(result['drums'], indent=2)[:2000])
+    print(json.dumps(result['events'], indent=2)[:2000])
