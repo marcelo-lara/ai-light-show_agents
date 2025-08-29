@@ -78,20 +78,73 @@ class LightingPlanner(Agent):
         
     def parse_response(self):
         """Parse the last response and extract plan entries."""
-        # Placeholder implementation
         if not self._last_response:
             print("⚠️ No response to parse")
             return
+            
         write_file(str(self.app_data.logs_folder / "lighting_planner.response.txt"), self._last_response)
-
-        # TODO: Implement response parsing for plan entries
-        # This would extract plan entries from the LLM response
-        # and add them to the plan
-
-        print("⚠️ LightingPlanner.parse_response -> Placeholder implementation")
+        
+        # Extract plan entries from the response
+        plan_lines = [line.strip() for line in self._last_response.split('\n') if line.strip() and line.startswith('#plan add at')]
+        
+        if not plan_lines:
+            print("⚠️ No plan entries found in response")
+            return
+            
+        # Clear existing plan entries
+        self.app_data.plan.clear_plan()
+        
+        # Parse each plan line and collect entries
+        parsed_entries = []
+        for line in plan_lines:
+            try:
+                plan_entry = self._parse_plan_line(line)
+                if plan_entry:
+                    parsed_entries.append(plan_entry)
+            except Exception as e:
+                print(f"⚠️ LightingPlanner.parse_response -> Error parsing plan line '{line}': {e}")
+        
+        # Sort entries by start time and assign IDs
+        parsed_entries.sort(key=lambda x: x.start)
+        
+        # Calculate end times based on next entry or default duration
+        for i, entry in enumerate(parsed_entries):
+            if i < len(parsed_entries) - 1:
+                # Set end time to next entry's start time
+                entry.end = parsed_entries[i + 1].start
+            else:
+                # Last entry: use a default duration of 10 seconds or song end
+                entry.end = min(entry.start + 10.0, self.app_data.song.duration)
+            
+            # Assign ID
+            entry.id = i + 1
+            
+            # Add to plan
+            self.app_data.plan.add_plan(entry)
+                    
+        # Save the updated plan
+        self.app_data.plan.save_plan()
 
     def _parse_plan_line(self, line: str) -> PlanEntry:
         """Parse a single plan entry line into a PlanEntry."""
-        # Placeholder implementation
-        # TODO: Implement parsing logic for plan entries
-        raise NotImplementedError("Plan line parsing not yet implemented")
+        # Pattern to match: #plan add at [time] "[label]" "[description]"
+        # Example: #plan add at 0.487 "Intro start" "half intensity blue chaser from left to right at 1b intervals"
+        
+        pattern = r'#plan add at ([\d.]+) "([^"]+)" "([^"]+)"'
+        match = re.match(pattern, line)
+        
+        if not match:
+            raise ValueError(f"Invalid plan format: {line}")
+            
+        start_time = float(match.group(1))
+        name = match.group(2)
+        description = match.group(3)
+        
+        # Create PlanEntry with temporary values (id and end will be set later)
+        return PlanEntry(
+            id=0,  # Will be set later
+            start=start_time,
+            end=start_time + 1.0,  # Temporary, will be calculated later
+            name=name,
+            description=description
+        )

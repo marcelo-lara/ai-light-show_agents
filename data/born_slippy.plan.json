@@ -2,9 +2,57 @@
   {
     "id": 1,
     "start": 0.0,
-    "end": 33.75,
-    "name": "Intro",
-    "description": "wave of blue flashes from left to right at every beat from 0.0 to 33.75"
+    "end": 34.21,
+    "name": "Dark Awakening",
+    "description": "dim red underlay with violet spotlights pulsing slowly, setting ominous tone"
+  },
+  {
+    "id": 2,
+    "start": 34.21,
+    "end": 55.21,
+    "name": "Drum Drop Impact",
+    "description": "sudden white strobe flash from all fixtures as heavy drums kick in, synchronized to bass line"
+  },
+  {
+    "id": 3,
+    "start": 55.21,
+    "end": 81.21,
+    "name": "Energy Surge",
+    "description": "rapid blue and purple sweeps across stage with high-intensity movements, matching the syncopated energy boost"
+  },
+  {
+    "id": 4,
+    "start": 81.21,
+    "end": 97.1,
+    "name": "Pattern Shift",
+    "description": "synchronized red and white strobe pulses transitioning between fixtures, highlighting the drum pattern change"
+  },
+  {
+    "id": 5,
+    "start": 97.1,
+    "end": 102.3,
+    "name": "Tom HiHat Phase",
+    "description": "coordinated green and yellow movements from Proton L/R paired with subtle amber highlights on ParCan R/L, capturing the toms and hihats pattern"
+  },
+  {
+    "id": 6,
+    "start": 102.3,
+    "end": 120.3,
+    "name": "Bridge Build-Up",
+    "description": "rapid purple strobe pulses intensifying across all fixtures while dimmer red undertone deepens, emphasizing the alternate kick-snares rhythm"
+  },
+  {
+    "id": 7,
+    "start": 120.3,
+    "end": 122.0,
+    "name": "Exit Tension",
+    "description": "steady amber light from Proton L/R with white highlights on ParCan R/L as snare patterns continue building intensity"
+  },
+  {
+    "id": 8,
+    "start": 122.0,
+    "end": 132.0,
+    "name": "Outro Fade",
+    "description": "gradual transition to deep violet undertones with subtle pulsing purple accents, mirroring the song's final fade"
   }
-
 ]
