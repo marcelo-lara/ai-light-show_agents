@@ -6,8 +6,8 @@ Generates a JSON summary for an MP3 + stems suitable as context for an LLM to de
 ```
 {
   "tempo": 128,                 # Estimated BPM (rounded)
-  "key": "Dm",                  # Musical key (fallback heuristic if Essentia unavailable)
-  "structure": [                # Coarse sectional segmentation (heuristic if no advanced segmentation)
+  "key": "Dm",                  # Musical key 
+  "structure": [                # Coarse sectional segmentation
     {"section": "intro", "start": 0.0, "end": 12.0},
     ...
   ],

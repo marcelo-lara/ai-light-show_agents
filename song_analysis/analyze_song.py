@@ -15,6 +15,7 @@ def _import_funcs():
     from song_analysis.energy import compute_energy_curve  # type: ignore
     from song_analysis.structure import segment_structure  # type: ignore
     from song_analysis.events import detect_events  # type: ignore
+    from song_analysis.spectral import analyze_spectral_emotion  # type: ignore
     from song_analysis.schema import SectionEntry, EventEntry  # type: ignore
     return locals()
 
@@ -29,6 +30,7 @@ def analyze(mp3_path: str, stems_folder: str, out_path: str) -> Dict[str, Any]:
     drums_info = funcs['detect_percussive_onsets'](y, sr, os.path.join(stems_folder, 'drums.wav'))
     vocal_sections, pitch_contour = funcs['detect_vocals_activity'](os.path.join(stems_folder, 'vocals.wav'))
     events = funcs['detect_events'](energy_curve, beats, sr)
+    spectral_emotion = funcs['analyze_spectral_emotion'](y, sr)
     data: Dict[str, Any] = {
         'tempo': round(tempo) if tempo else 0,
         'key': key,
@@ -40,7 +42,8 @@ def analyze(mp3_path: str, stems_folder: str, out_path: str) -> Dict[str, Any]:
             'pitch_contour': pitch_contour
         },
         'energy_curve': energy_curve,
-        'events': [e.to_dict() for e in events]
+        'events': [e.to_dict() for e in events],
+        'spectral_emotion': spectral_emotion
     }
     with open(out_path, 'w') as f:
         json.dump(data, f, indent=2)
