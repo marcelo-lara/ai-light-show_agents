@@ -1,6 +1,6 @@
 """Spectral and emotional feature extraction for lighting themes."""
 from __future__ import annotations
-from typing import List, Dict, Tuple, Any
+from typing import List, Dict, Tuple, Any, Optional
 import numpy as np
 
 try:
@@ -103,12 +103,12 @@ def classify_mood_emotion(y: np.ndarray, sr: int) -> Dict[str, Any]:
             # Adjust based on spectral flux (texture changes)
             if avg_flux > 0.1:  # High texture changes = energetic
                 if result['mood'] == 'bright':
-                    result['lighting_theme'] = 'energetic_rainbow'
+                    result['lighting_theme'] = 'energetic_bright'
                 elif result['mood'] == 'dark':
-                    result['lighting_theme'] = 'intense_purple'
+                    result['lighting_theme'] = 'medium_bright'
             elif avg_flux < 0.05:  # Low texture changes = calm
                 if result['mood'] == 'bright':
-                    result['lighting_theme'] = 'soft_warm'
+                    result['lighting_theme'] = 'soft_light'
                 elif result['mood'] == 'dark':
                     result['lighting_theme'] = 'calm_blue'
 
@@ -116,19 +116,58 @@ def classify_mood_emotion(y: np.ndarray, sr: int) -> Dict[str, Any]:
 
     return result
 
-def analyze_spectral_emotion(y: np.ndarray, sr: int) -> Dict[str, Any]:
+def analyze_spectral_emotion(y: np.ndarray, sr: int, sections: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
     """Complete spectral and emotional analysis.
+
+    Args:
+        y: Audio signal
+        sr: Sample rate
+        sections: Optional list of song sections with start/end times
 
     Returns:
         {
             'spectral_features': {...},
-            'mood_analysis': {...}
+            'mood_analysis': {...},
+            'section_moods': [...]  # Only if sections provided
         }
     """
     spectral_features = compute_spectral_features(y, sr)
     mood_analysis = classify_mood_emotion(y, sr)
-
-    return {
+    
+    result = {
         'spectral_features': spectral_features,
         'mood_analysis': mood_analysis
     }
+    
+    # Analyze mood for each section if sections are provided
+    if sections:
+        section_moods = []
+        for section in sections:
+            start_time = section['start']
+            end_time = section['end']
+            
+            # Convert time to sample indices
+            start_sample = int(start_time * sr)
+            end_sample = int(end_time * sr)
+            
+            # Extract section audio
+            if start_sample < len(y) and end_sample <= len(y):
+                section_audio = y[start_sample:end_sample]
+                
+                # Analyze this section
+                section_spectral = compute_spectral_features(section_audio, sr)
+                section_mood = classify_mood_emotion(section_audio, sr)
+                
+                section_analysis = {
+                    'section': section['section'],
+                    'start': start_time,
+                    'end': end_time,
+                    'duration': end_time - start_time,
+                    'spectral_features': section_spectral,
+                    'mood_analysis': section_mood
+                }
+                section_moods.append(section_analysis)
+        
+        result['section_moods'] = section_moods
+    
+    return result

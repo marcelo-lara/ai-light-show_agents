@@ -30,7 +30,7 @@ def analyze(mp3_path: str, stems_folder: str, out_path: str) -> Dict[str, Any]:
     drums_info = funcs['detect_percussive_onsets'](y, sr, os.path.join(stems_folder, 'drums.wav'))
     vocal_sections, pitch_contour = funcs['detect_vocals_activity'](os.path.join(stems_folder, 'vocals.wav'))
     events = funcs['detect_events'](energy_curve, beats, sr)
-    spectral_emotion = funcs['analyze_spectral_emotion'](y, sr)
+    spectral_emotion = funcs['analyze_spectral_emotion'](y, sr, [s.to_dict() for s in sections])
     data: Dict[str, Any] = {
         'tempo': round(tempo) if tempo else 0,
         'key': key,
