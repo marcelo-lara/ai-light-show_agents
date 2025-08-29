@@ -8,13 +8,6 @@ try:
 except ImportError:  # pragma: no cover
     librosa = None  # type: ignore
 
-try:
-    import essentia  # type: ignore
-    import essentia.standard as es  # type: ignore
-except ImportError:  # pragma: no cover
-    essentia = None  # type: ignore
-    es = None  # type: ignore
-
 def compute_spectral_features(y: np.ndarray, sr: int) -> Dict[str, List[float]]:
     """Compute spectral features for lighting control.
 
@@ -56,7 +49,7 @@ def compute_spectral_features(y: np.ndarray, sr: int) -> Dict[str, List[float]]:
     return features
 
 def classify_mood_emotion(y: np.ndarray, sr: int) -> Dict[str, Any]:
-    """Classify mood and emotion using Essentia.
+    """Classify mood and emotion using spectral analysis.
 
     Returns:
         {
@@ -73,46 +66,69 @@ def classify_mood_emotion(y: np.ndarray, sr: int) -> Dict[str, Any]:
         'lighting_theme': 'default'
     }
 
-    if es is None:
+    if librosa is None:
+        print("!!!!!Librosa is not available.")
         return result
 
     try:
-        # For now, use spectral analysis for mood estimation
-        # Essentia extractors may not be available in this environment
-        raise ImportError("Essentia extractors not available")
-
-    except Exception as e:
-        print(f"Warning: Advanced mood classification failed: {e}")
-        # Fallback to basic spectral analysis
+        # Use spectral analysis for mood estimation
         spectral_features = compute_spectral_features(y, sr)
         if spectral_features['spectral_centroid']:
             avg_centroid = np.mean(spectral_features['spectral_centroid'])
             avg_flux = np.mean(spectral_features['spectral_flux']) if spectral_features['spectral_flux'] else 0
 
-            # Rough mood estimation based on spectral features
-            if avg_centroid > 3000:  # Bright/high frequency
+            # Enhanced mood estimation based on spectral features
+            if avg_centroid > 3500:  # Very bright/high frequency
                 result['mood'] = 'bright'
+                result['emotion'] = 'energetic'
                 result['lighting_theme'] = 'bright_warm'
-            elif avg_centroid > 2000:  # Medium
+            elif avg_centroid > 2500:  # Bright/medium frequency
+                result['mood'] = 'bright'
+                result['emotion'] = 'uplifting'
+                result['lighting_theme'] = 'warm_white'
+            elif avg_centroid > 1500:  # Medium frequency
                 result['mood'] = 'neutral'
+                result['emotion'] = 'balanced'
                 result['lighting_theme'] = 'balanced'
             else:  # Dark/low frequency
                 result['mood'] = 'dark'
+                result['emotion'] = 'calm'
                 result['lighting_theme'] = 'cool_blue'
 
             # Adjust based on spectral flux (texture changes)
-            if avg_flux > 0.1:  # High texture changes = energetic
+            if avg_flux > 0.15:  # High texture changes = very energetic
                 if result['mood'] == 'bright':
                     result['lighting_theme'] = 'energetic_bright'
-                elif result['mood'] == 'dark':
+                    result['emotion'] = 'excited'
+                elif result['mood'] == 'neutral':
+                    result['lighting_theme'] = 'dynamic_white'
+                    result['emotion'] = 'active'
+                else:
                     result['lighting_theme'] = 'medium_bright'
-            elif avg_flux < 0.05:  # Low texture changes = calm
+                    result['emotion'] = 'mysterious'
+            elif avg_flux > 0.08:  # Medium texture changes = moderate energy
                 if result['mood'] == 'bright':
                     result['lighting_theme'] = 'soft_light'
+                    result['emotion'] = 'joyful'
                 elif result['mood'] == 'dark':
                     result['lighting_theme'] = 'calm_blue'
+                    result['emotion'] = 'peaceful'
+            else:  # Low texture changes = calm
+                if result['mood'] == 'bright':
+                    result['lighting_theme'] = 'gentle_warm'
+                    result['emotion'] = 'serene'
+                elif result['mood'] == 'dark':
+                    result['lighting_theme'] = 'deep_blue'
+                    result['emotion'] = 'meditative'
 
-            result['confidence'] = 0.7  # Moderate confidence for spectral-based estimation
+            result['confidence'] = 0.8  # Good confidence for enhanced spectral-based estimation
+
+    except Exception as e:
+        # If spectral analysis fails, return basic result
+        result['mood'] = 'neutral'
+        result['emotion'] = 'neutral'
+        result['confidence'] = 0.5
+        result['lighting_theme'] = 'balanced'
 
     return result
 
