@@ -108,18 +108,22 @@ for model in agent.get_models():
     print(f"   - {model}")
 
 ## 2. Create Lighting Plan
-lighting_planner = LightingPlanner()
-lighting_planner.parse_song_context("born_slippy")
-lighting_planner.run()
-app_data.plan.clear_plan()
-lighting_planner.parse_response()
+# lighting_planner = LightingPlanner()
+# lighting_planner.parse_song_context("born_slippy")
+# lighting_planner.run()
+# app_data.plan.clear_plan()
+# lighting_planner.parse_response()
 
 # 3. Translate Effects into Actions
-# effect_translator = EffectTranslator()
-# print("\n## EffectTranslator")
-# print(f" - Model: {effect_translator.model}")
-# effect_translator.parse_plan_entry(plan_entry)
 
+effect_translator = EffectTranslator()
+print("\n## EffectTranslator")
+print(f" - Model: {effect_translator.model}")
+for plan_entry in app_data.plan:
+    print(f"\n   - Plan Entry: {plan_entry.name}")
+    effect_translator.translate_plan_entry(plan_entry)
+    asyncio.run(effect_translator.run_async())
+    effect_translator.parse_response()
 
 
 # effect_translator._last_response = read_file(str(app_data.logs_folder / "EffectTranslator.response.txt"))
