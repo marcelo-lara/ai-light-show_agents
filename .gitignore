@@ -1,6 +1,7 @@
 songs/
 logs/
 stems/
+data/
 pretrained_models/
 
 # Byte-compiled / optimized / DLL files

@@ -49,25 +49,26 @@ def analyze(mp3_path: str, stems_folder: str, out_path: str) -> Dict[str, Any]:
         json.dump(data, f, indent=2)
     return data
 
-def main(argv=None):
-    parser = argparse.ArgumentParser(description='Analyze song and extract features for light show generation.')
-    parser.add_argument('--song', required=True)
-    parser.add_argument('--stems', required=True)
-    parser.add_argument('--out', required=True)
-    parser.add_argument('--no-split', action='store_true')
-    parser.add_argument('--stems-model', choices=['2stems','4stems'], default='4stems')
-    args = parser.parse_args(argv)
-    # Configure stems flags
-    from song_analysis import stems as _stems_mod  # type: ignore
-    _stems_mod.AUTO_SPLIT_ENABLED = not args.no_split
-    _stems_mod.STEMS_MODEL = args.stems_model
-    result = analyze(args.song, args.stems, args.out)
-    print(json.dumps(result, indent=2)[:2000])
-
 if __name__ == '__main__':  # pragma: no cover
-    result = analyze(
-        mp3_path="/home/darkangel/ai-light-show_agents/songs/born_slippy.mp3",
-        stems_folder="/home/darkangel/ai-light-show_agents/stems",
-        out_path="/home/darkangel/ai-light-show_agents/data/born_slippy.analysis.json"
-    )
-    print(json.dumps(result['events'], indent=2)[:2000])
+    base_folder = "/home/darkangel/ai-light-show_agents"
+
+    # list of available songs
+    songs_folder = os.path.join(base_folder, "songs")
+    available_songs = [f[:-4] for f in os.listdir(songs_folder) if f.endswith('.mp3')]
+    for song in available_songs:
+        mp3_path = os.path.join(songs_folder, f"{song}.mp3")
+        stems_folder = os.path.join(base_folder, "stems")
+        out_path = os.path.join(base_folder, "data", f"{song}.analysis.json")
+        print(f"\n## {song}: {mp3_path}")
+        analyze(
+                mp3_path=mp3_path,
+                stems_folder=stems_folder,
+                out_path=out_path
+            )
+
+    # result = analyze(
+    #     mp3_path=mp3_path,
+    #     stems_folder=os.path.join(base_folder, "stems"),
+    #     out_path=os.path.join(base_folder, "data/born_slippy.analysis.json")
+    # )
+    # print(json.dumps(result['events'], indent=2)[:2000])
