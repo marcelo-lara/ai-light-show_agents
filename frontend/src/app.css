@@ -1,202 +1,145 @@
+/* App layout and dark theme (VS Code-like) */
 html, body, #app {
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
   margin: 0;
-  font-family: sans-serif;
-  /* App layout and dark theme (VS Code-like) */
-  html, body, #app {
-    height: 100vh;
-    width: 100vw;
-    margin: 0;
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-    overflow: hidden; /* hide canvas scroll as requested */
-    background-color: #1e1e1e; /* VS Code background */
-    color: #d4d4d4;
-  }
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  overflow: hidden;
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+}
 
-  .app {
-    display: flex;
-    height: 100%;
-    width: 100%;
-  }
+.app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
 
-  .main-panel {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    gap: 1rem;
-    box-sizing: border-box;
-  }
+.main-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+  box-sizing: border-box;
+  min-width: 0;
+}
 
-  .right-panel {
-    width: 400px;
-    border-left: 1px solid rgba(255,255,255,0.06);
-    display: flex;
-    flex-direction: column;
-    background: transparent;
-  }
+.right-panel {
+  width: 400px;
+  border-left: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  height: 100vh;
+}
 
-  .columns {
-    display: flex;
-    gap: 1rem;
-    flex-grow: 1;
-    height: calc(100% - 4rem);
-    overflow: hidden;
-  }
+.columns {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+}
 
-  .card {
-    border: 1px solid rgba(255,255,255,0.04);
-    border-radius: 6px;
-    padding: 1rem;
-    background-color: #252526; /* dark card like VS Code panels */
-    display: flex;
-    flex-direction: column;
-    color: #d4d4d4;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.5) inset;
-  }
+.card {
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 6px;
+  padding: 1rem;
+  background-color: #252526;
+  display: flex;
+  flex-direction: column;
+  color: #d4d4d4;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.5) inset;
+  min-height: 0;
+}
 
-  .scrollable-list {
-    overflow-y: auto;
-    flex-grow: 1;
-    padding-right: 0.25rem;
-  }
+.columns > .card {
+  flex: 1;
+  min-width: 0;
+}
 
-  .tabs {
-    display: flex;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    /* App layout and dark theme (VS Code-like) */
-    html, body, #app {
-      height: 100vh;
-      width: 100vw;
-      margin: 0;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-      overflow: hidden; /* hide canvas scroll as requested */
-      background-color: #1e1e1e; /* VS Code background */
-      color: #d4d4d4;
-    }
+.scrollable-list {
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 0.25rem;
+}
 
-    .app {
-      display: flex;
-      height: 100%;
-      width: 100%;
-    }
+.tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  background: #1e1e1e;
+  flex-shrink: 0;
+}
 
-    .main-panel {
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      padding: 1rem;
-      gap: 1rem;
-      box-sizing: border-box;
-    }
+.tabs button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #c5c5c5;
+}
 
-    .right-panel {
-      width: 400px;
-      border-left: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      flex-direction: column;
-      background: transparent;
-    }
+.tabs button:hover {
+  color: #e6e6e6;
+}
 
-    .columns {
-      display: flex;
-      gap: 1rem;
-      flex: 1 1 auto; /* take remaining vertical space in main-panel */
-      align-items: stretch;
-      overflow: hidden;
-    }
+.tabs button.active {
+  border-bottom: 2px solid #007acc;
+  color: #ffffff;
+}
 
-    .card {
-      border: 1px solid rgba(255,255,255,0.04);
-      border-radius: 6px;
-      padding: 1rem;
-      background-color: #252526; /* dark card like VS Code panels */
-      display: flex;
-      flex-direction: column;
-      color: #d4d4d4;
-      box-shadow: 0 1px 0 rgba(0,0,0,0.5) inset;
-    }
+.tab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
 
-    .columns > .card {
-      flex: 1 1 0; /* equal width columns */
-      min-width: 0; /* allow shrinking and proper overflow */
-      display: flex;
-      flex-direction: column;
-    }
+.tab-content > .card {
+  flex: 1;
+  margin: 1rem;
+  margin-top: 0;
+}
 
-    .scrollable-list {
-      overflow-y: auto;
-      flex: 1 1 auto;
-      padding-right: 0.25rem;
-    }
+.chat-window {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  overflow-y: auto;
+}
 
-    .tabs {
-      display: flex;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      background: #1e1e1e;
-    }
+.message {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  max-width: 80%;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
 
-    .tabs button {
-      padding: 0.5rem 1rem;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      color: #c5c5c5;
-    }
+.message.user {
+  background-color: #007acc;
+  color: #ffffff;
+  align-self: flex-end;
+}
 
-    .tabs button:hover {
-      color: #e6e6e6;
-    }
+.message.assistant {
+  background-color: #2d2d2d;
+  border: 1px solid rgba(255,255,255,0.03);
+  color: #d4d4d4;
+  align-self: flex-start;
+}
 
-    .tabs button.active {
-      border-bottom: 2px solid #007acc; /* VS Code blue */
-      color: #ffffff;
-    }
-
-    .tab-content {
-      padding: 1rem;
-      flex-grow: 1;
-      overflow-y: auto;
-    }
-
-    .chat-window {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .message {
-      padding: 0.5rem 0.75rem;
-      border-radius: 8px;
-      max-width: 80%;
-      font-size: 0.95rem;
-      line-height: 1.3;
-    }
-
-    .message.user {
-      background-color: #007acc; /* VS Code blue */
-      color: #ffffff;
-      align-self: flex-end;
-    }
-
-    .message.assistant {
-      background-color: #2d2d2d;
-      border: 1px solid rgba(255,255,255,0.03);
-      color: #d4d4d4;
-      align-self: flex-start;
-    }
-
-    input[type="text"], textarea {
-        width: 100%;
-        padding: 0.5rem;
-        border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 4px;
-        box-sizing: border-box;
-        background: #1e1e1e;
-        color: #d4d4d4;
-    }
+input[type="text"], textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  box-sizing: border-box;
+  background: #1e1e1e;
+  color: #d4d4d4;
+}
 
     .audio-player-card {
       display: grid;
@@ -204,11 +147,5 @@ html, body, #app {
       gap: 0.5rem;
     }
 
-    .right-panel .card {
-      margin: 1rem;
-    }
-
-    /* small helpers */
-    .muted { color: #9a9a9a; }
-  }
-}
+/* small helpers */
+.muted { color: #9a9a9a; }
