@@ -24,8 +24,8 @@ WORKDIR /app
 COPY backend/requirements.txt ./backend/
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r backend/requirements.txt && \
-    pip install gunicorn eventlet
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r backend/requirements.txt
 
 # Copy backend files
 COPY backend/ ./backend/
@@ -34,7 +34,6 @@ COPY backend/ ./backend/
 COPY common/ ./common/
 COPY data/ ./data/
 COPY songs/ ./songs/
-COPY fixtures/ ./fixtures/ 
 
 # Copy the built frontend from the frontend-build stage
 COPY --from=frontend-build /app/frontend/dist ./frontend/dist
