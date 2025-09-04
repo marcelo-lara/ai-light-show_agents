@@ -40,6 +40,25 @@ class AppData:
         self._dmx_canvas = DMXCanvas()
         self._song_analysis = {}
         
+        # performance state
+        self._is_playing = False
+        self._current_time = 0.0  # in seconds
+        
+    @property
+    def is_playing(self) -> bool:
+        return self._is_playing
+    @is_playing.setter
+    def is_playing(self, value: bool):
+        self._is_playing = value
+
+    @property
+    def current_time(self) -> float:
+        return self._current_time
+
+    @current_time.setter
+    def current_time(self, value: float):
+        self._current_time = value
+
     def load_song(self, song_name: str):
         self._song = Song(song_name, base_folder=str(self._base_folder))
         self._plan.load_plan()

@@ -2,62 +2,163 @@
 
 Purpose
 -------
-Provide an automated contributor/agent guide with minimal, concrete steps to be productive in this repository.
+Provide an automated contributor/agent guide with minimal, concrete steps to be productive in this repository. This is a modern, WebSocket-based AI light show management system with strict architectural principles.
 
 High-level architecture
 -----------------------
-- `app.py` is a small CLI-style example that wires core pieces (AppData, Agent, EffectTranslator, DMXCanvas) and demonstrates repository usage.
-- `models/` contains domain models: `app_data.py` (singleton AppData), `song/`, `lighting/` (Plan/PlanEntry), and fixtures. Data lives in `data/` and `songs/`.
-- `agents/` contains AI-facing classes and Jinja prompts: `agents/agent.py` (base Agent), `agents/effect_tramslator/effect_translator.py` (EffectTranslator), and `agents/prompts/*.j2` templates used to build prompts.
-- `models/dmx/dmx_canvas.py` holds the DMX frame buffer used to render lighting output (512-channel bytearrays keyed by time).
-- Integration with an LLM service (configured via Docker Compose as `llm-service`) is expected at `http://localhost:11434`.
+- **Frontend**: Preact-based SPA (`frontend/`) with WebSocket-only communication using Socket.IO client
+- **Backend**: Flask-SocketIO server (`backend/app.py`) with Agent-based AI system and WebSocket services
+- **Communication**: EXCLUSIVELY WebSocket-based - NO REST APIs allowed
+- **Real-time state**: WebSocket service manages app state and real-time updates
+- **AI Agents**: Located in `backend/agents/` with Jinja2 prompt templates for LLM interactions
+- **DMX Canvas**: Real-time lighting frame buffer (`models/dmx/dmx_canvas.py`) for 512-channel output
 
 Key files to inspect
 --------------------
-- `app.py` — canonical usage: load song, print fixtures, create Agent and EffectTranslator, render the DMX canvas, and run an example flow.
-- `models/app_data.py` — the AppData singleton. Preferred access point for data folders, fixtures, loaded `Song`, `Plan`, `ActionList`, and `DMXCanvas` instances.
-- `agents/agent.py` — base Agent implementation: builds prompt context from Jinja templates and calls the LLM (Ollama) streaming API. Inspect `parse_context()` and `run_async()`.
-- `agents/effect_tramslator/effect_translator.py` — translates plan entries into action commands. Uses `get_actions_reference()` and `parse_plan_entry()` to prepare prompts.
-- `agents/prompts/*.j2` — edit these to control how agents reason. Template variables: `agent`, `song`, `fixtures`, plus any extras passed by callers.
-- `models/dmx/dmx_canvas.py` — DMX canvas logic: 512 channels, FPS default 50, frames keyed to rounded floats. Rendering helpers and frame accessors are here.
+- **WebSocket Architecture**:
+  - `backend/services/websocket_manager.py` — WebSocket message handlers and app state management
+  - `backend/app.py` — Flask-SocketIO server setup with connection handlers
+  - `frontend/src/WebSocket.ts` — Singleton WebSocket service with type-safe messaging
+  - `frontend/src/hooks/useWebSocket.ts` — React hook for WebSocket state management
+  - `frontend/src/components/WebSocketStatus.tsx` — Connection status UI component
+
+- **Agent System**:
+  - `backend/agents/agent.py` — Base Agent implementation with LLM streaming API
+  - `backend/agents/effect_tramslator/effect_translator.py` — Translates plans into DMX actions
+  - `backend/agents/lighting_planner/lighting_planner.py` — Creates lighting plans from song analysis
+  - `backend/agents/prompts/*.j2` — Jinja2 templates for AI prompt construction
+
+- **Data Models**:
+  - `backend/models/app_data.py` — AppData singleton for centralized state management
+  - `backend/models/dmx/dmx_canvas.py` — DMX frame buffer (512 channels, 50 FPS default)
+  - `backend/models/lighting/` — Plan, PlanEntry, and ActionList models
+
+- **Frontend Components**:
+  - `frontend/src/app.tsx` — Main app layout with WebSocket integration
+  - `frontend/src/components/AssistantChat.tsx` — AI chat interface using WebSocket
+  - `frontend/src/components/WebSocketStatus.tsx` — Real-time connection monitoring
 
 Conventions and important rules
 -----------------------------
-- Template naming: `Agent.parse_context` converts a class name to snake_case and appends `.j2`. Example: `EffectTranslator` -> `effect_translator.j2`.
-- Template variables: `agent` is always available. `parse_context()` will inject `song` and `fixtures` unless callers provide alternatives.
-- Persistence: action lists are stored as JSON files named `{song_name}.actions.json` under the AppData `data_folder`.
-- DO NOT read JSON files directly in code — use AppData helpers and public properties (`AppData().data_folder`, `AppData().song`, etc.).
-- DMX frames are 0-indexed in code (512 channels). Confirm external hardware expectations before changing indexing.
-- DO NOT keep backward compatibility in mind when making changes.
-- DO NOT introduce fallback variants unless explicitly requested.
+**STRICT ARCHITECTURAL PRINCIPLES** (NO EXCEPTIONS):
+- **WebSocket-Only Communication**: NEVER create REST APIs. ALL frontend-backend communication MUST use WebSockets
+- **No Fallback Methods**: Do NOT create alternative communication methods or compatibility layers
+- **No Backward Compatibility**: Break existing patterns if they don't follow current best practices
+- **Best Practices Enforcement**: Always use the established WebSocket service pattern
+
+**WebSocket Communication**:
+- Use `webSocketService.sendMessage(action, params)` for frontend→backend messages
+- Backend handlers in `websocket_manager.py` emit responses via `emit(event_name, data)`
+- App state updates sent via `app_state` event on connection and state changes
+- TypeScript interfaces define message schemas in `frontend/src/WebSocket.ts`
+
+**Template and File Naming**:
+- Agent prompt templates: `backend/agents/prompts/{snake_case_class_name}.j2`
+- WebSocket message handlers: Use descriptive action names (e.g., 'load_song', 'generate_plan')
+- Component files: PascalCase with `.tsx` extension
+- Hook files: `use{FeatureName}.ts` pattern
+
+**Data Access**:
+- ALWAYS use AppData singleton for data access: `AppData().song`, `AppData().fixtures`
+- DO NOT read JSON files directly — use AppData properties and methods
+- WebSocket handlers should use AppData to get current state
+
+**DMX and Lighting**:
+- DMX channels are 0-indexed in code (0-511 range)
+- Frame timing uses 50 FPS default, frames keyed to rounded float timestamps
+- Plans stored as JSON in `data/{song_name}.plan.json`
+- Actions stored as JSON in `data/{song_name}.actions.json`
 
 Developer workflows (concrete commands)
 --------------------------------------
-- ALWAYS run python in the "ai-light" context (activate with `pyenv activate ai-light`)
-- Start the LLM service used by the agents (Ollama):
-  - From the repo root run: `docker-compose up -d llm-service`
-- Verify available models: call `Agent().get_models()` in a short script, or GET `http://localhost:11434/api/tags`.
-- Run the example CLI: `python app.py` (ensure your Python environment has required libs such as `jinja2` and `aiohttp`).
+**Environment Setup**:
+- ALWAYS activate Python environment: `pyenv activate ai-light && clear`
+- Start LLM service: `docker compose up -d llm-service` 
+- Start full application: `docker compose up -d`
+
+**Frontend Development**:
+- Use WebSocket hook in components: `const { isConnected, currentSong, sendMessage } = useWebSocket()`
+- For new WebSocket messages, add TypeScript types to `WebSocket.ts`
+- Test WebSocket connection via the WebSocketStatus component
+- Build: `cd frontend && npm run build`
+
+**Backend Development**:
+- Add WebSocket handlers to `websocket_manager.py`
+- Agent development: Create class in `agents/`, add prompt template in `prompts/`
+- Test agents: Access via `Agent().get_models()` or direct instantiation
+- Run backend: `python backend/app.py` (requires activated environment)
+
+**WebSocket Message Flow**:
+1. Frontend: `sendMessage('action_name', { param: 'value' })`
+2. Backend: `@socketio.on('message')` handler processes action
+3. Backend: `emit('response_event', data)` sends response
+4. Frontend: WebSocket service receives event, notifies subscribers
 
 Where outputs are written
 ------------------------
-- Generated logs: `logs/` (examples include `effect_translator.context.txt` and `EffectTranslator.response.txt`).
-- Persistent action lists: `data/{song_name}.actions.json`.
+- **Logs**: `logs/` directory (agent responses, context files)
+- **Generated plans**: `data/{song_name}.plan.json`
+- **Generated actions**: `data/{song_name}.actions.json`
+- **DMX frames**: In-memory DMXCanvas, can be exported
+- **WebSocket logs**: Console output with emoji prefixes for easy debugging
 
 Integration points & external dependencies
 -----------------------------------------
-- Ollama LLM service (docker image `ollama/ollama`) — configured in `docker-compose.yml`, exposed on port 11434. The repo expects this to be available locally for agent runs.
-- Local content: `data/*.json|.pkl` (plan/beat/chord/meta), `songs/*.mp3`, and `fixtures/fixtures.json` drive prompt construction and rendering.
+- **Ollama LLM service**: Docker container on port 11434 (`llm-service` in docker-compose)
+- **Song files**: MP3s in `songs/` directory
+- **Analysis data**: JSON files in `data/` (beats, chords, analysis)
+- **Fixtures**: `backend/fixtures/fixtures.json` defines DMX fixture configurations
+- **Frontend build**: Vite-based build system, output to `frontend/dist/`
 
 Quick tips for safe changes
 --------------------------
-- To modify agent prompts, edit `agents/prompts/<template>.j2` and test via `EffectTranslator().parse_plan_entry(...)` followed by `EffectTranslator().run()`.
-- Respect DMX channel indexing and 512-channel frame size when producing frames.
-- To add a new Agent subclass, follow the naming convention and add a corresponding prompt template in `agents/prompts/`.
+**WebSocket Development**:
+- Test WebSocket connection first: check WebSocketStatus component
+- Use TypeScript interfaces for message types
+- Handle connection states in UI (show loading/error states)
+- Use the `useWebSocket` hook for component integration
+
+**Agent Development**:
+- Follow naming convention: `ClassName` → `class_name.j2` prompt template
+- Test prompts by calling `agent.parse_context()` before `agent.run()`
+- Use AppData singleton for accessing song, fixtures, plans
+
+**Frontend Components**:
+- Import and use `useWebSocket` hook for state management
+- Handle WebSocket disconnection gracefully (disable buttons, show status)
+- Use existing CSS classes for consistency
+
+**Data Management**:
+- Use AppData properties instead of direct file access
+- WebSocket handlers should emit state changes to keep frontend in sync
+- DMX frames are ephemeral — persist important data as JSON
 
 Troubleshooting notes
 ---------------------
-- If `python app.py` fails with `ModuleNotFoundError` for `aiohttp`, install dependencies in your virtualenv (`pip install aiohttp jinja2`) or use the project's recommended environment.
-- If the Ollama server is unreachable, ensure Docker is running and `docker-compose up -d llm-service` completed successfully.
+**WebSocket Issues**:
+- Check WebSocketStatus component for connection state
+- Verify backend is running: `docker-compose logs backend`
+- Ensure ports are not blocked (5000 for backend)
+- Check browser console for WebSocket connection errors
 
-If anything here is unclear or you want the file tuned (more examples, troubleshooting steps, or CI/test instructions), tell me which area to expand and I will iterate.
+**Build Issues**:
+- Frontend TypeScript errors: Check type imports and WebSocket message interfaces
+- Backend import errors: Verify Python environment is activated
+- Docker build fails: Check for syntax errors in modified files
+
+**Agent Issues**:
+- LLM service unreachable: Ensure `docker-compose up -d llm-service` completed
+- Template errors: Verify Jinja2 syntax in `.j2` files
+- Missing song data: Check `data/` directory for required JSON files
+
+**Performance Issues**:
+- WebSocket message flooding: Implement rate limiting or message batching
+- Large JSON responses: Consider pagination or data streaming
+- Memory usage: Check DMX canvas frame accumulation
+
+**Development Principles**:
+- NEVER create REST API endpoints — use WebSocket messages exclusively
+- NEVER create fallback methods
+- ALWAYS enforce TypeScript types for WebSocket messages
+- ALWAYS use the established WebSocket service singleton pattern
+- ALWAYS handle WebSocket connection states in UI components

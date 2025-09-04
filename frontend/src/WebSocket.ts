@@ -5,6 +5,8 @@ export interface AppState {
   type: "app_state";
   data: {
     current_song: string | null;
+    is_playing: boolean;
+    current_time: number;
   };
 }
 

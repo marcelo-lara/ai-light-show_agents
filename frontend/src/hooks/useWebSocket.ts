@@ -5,6 +5,8 @@ import type { AppState } from '../WebSocket';
 export interface WebSocketHookReturn {
   isConnected: boolean;
   currentSong: string | null;
+  isPlaying: boolean;
+  currentTime: number;
   error: string | null;
   sendMessage: (action: string, params?: any) => void;
   reconnect: () => void;
@@ -13,12 +15,16 @@ export interface WebSocketHookReturn {
 export function useWebSocket(): WebSocketHookReturn {
   const [isConnected, setIsConnected] = useState(false);
   const [currentSong, setCurrentSong] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   // Handle app state updates
   const handleAppState = useCallback((state: AppState) => {
     console.log('Hook received app state:', state);
     setCurrentSong(state.data.current_song);
+    setIsPlaying(state.data.is_playing);
+    setCurrentTime(state.data.current_time);
     // Clear any previous errors when we get a valid state
     setError(null);
   }, []);
@@ -67,6 +73,8 @@ export function useWebSocket(): WebSocketHookReturn {
   return {
     isConnected,
     currentSong,
+    isPlaying,
+    currentTime,
     error,
     sendMessage,
     reconnect
