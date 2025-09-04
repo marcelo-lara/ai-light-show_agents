@@ -15,15 +15,21 @@ eventlet.monkey_patch()
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from backend.models.app_data import AppData
-from backend.agents.effect_tramslator.effect_translator import EffectTranslator
-from backend.agents.agent import Agent
-from backend.models.lighting.action_list import ActionEntry
+from backend.services.websocket_manager import handle_new_connection
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'frontend', 'dist'), static_url_path='')
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Global app_data instance
 app_data = AppData()
+
+# Initialize with a default song
+try:
+    app_data.load_song("born_slippy")
+    print("Loaded default song: born_slippy")
+except Exception as e:
+    print(f"Warning: Could not load default song - {e}")
+    print("App will start without a song loaded")
 
 @app.route('/')
 def serve_frontend():
@@ -37,6 +43,12 @@ def serve_static(path):
 def serve_song(filename):
     songs_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'songs')
     return send_from_directory(songs_dir, filename)
+
+@socketio.on('connect')
+def handle_connect():
+    """Handle new WebSocket connections"""
+    print("New WebSocket connection established")
+    handle_new_connection()
 
 @socketio.on('message')
 def handle_message(data):

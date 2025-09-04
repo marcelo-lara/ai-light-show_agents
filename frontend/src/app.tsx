@@ -7,6 +7,7 @@ import { Actions } from './components/Actions'
 import { AssistantChat } from './components/AssistantChat'
 import { DmxFixtures } from './components/DmxFixtures'
 import { ServerLog } from './components/ServerLog'
+import { WebSocketStatus } from './components/WebSocketStatus'
 
 
 export function App() {
@@ -21,6 +22,7 @@ export function App() {
           <SongPlan />
           <Actions />
         </div>
+        <WebSocketStatus />
       </div>
       <div class="right-panel">
         <div class="tabs">
