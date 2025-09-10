@@ -9,13 +9,9 @@ def get_app_state() -> Dict[str, Any]:
     """
     app_data = AppData()
     
-    # Get current song name, default to None if no song is loaded
+    # Get current song name, default to a known song if no song is loaded
     current_song = None
-    try:
-        current_song = app_data.song_name
-    except AttributeError:
-        # No song loaded yet
-        pass
+    current_song = app_data.song_name
     
     return {
         "type": "app_state",
@@ -34,6 +30,56 @@ def handle_new_connection():
     app_state = get_app_state()
     emit('app_state', app_state)
     print(f"🔗 Sent app_state to new connection: song='{app_state['data']['current_song']}', playing={app_state['data']['is_playing']}, time={app_state['data']['current_time']}s")
+
+def handle_play_audio():
+    """
+    Handle play audio command from frontend
+    """
+    app_data = AppData()
+    app_data.is_playing = True
+    
+    # Emit updated state to all clients
+    app_state = get_app_state()
+    emit('app_state', app_state, broadcast=True)
+    print(f"🎵 Audio playback started")
+
+def handle_pause_audio():
+    """
+    Handle pause audio command from frontend
+    """
+    app_data = AppData()
+    app_data.is_playing = False
+    
+    # Emit updated state to all clients
+    app_state = get_app_state()
+    emit('app_state', app_state, broadcast=True)
+    print(f"⏸️ Audio playback paused")
+
+def handle_stop_audio():
+    """
+    Handle stop audio command from frontend
+    """
+    app_data = AppData()
+    app_data.is_playing = False
+    app_data.current_time = 0.0
+    
+    # Emit updated state to all clients
+    app_state = get_app_state()
+    emit('app_state', app_state, broadcast=True)
+    print(f"⏹️ Audio playback stopped")
+
+def handle_seek_audio(params: Dict[str, Any]):
+    """
+    Handle seek audio command from frontend
+    """
+    time = params.get('time', 0.0)
+    app_data = AppData()
+    app_data.current_time = float(time)
+    
+    # Emit updated state to all clients
+    app_state = get_app_state()
+    emit('app_state', app_state, broadcast=True)
+    print(f"⏭️ Audio seeked to {time:.2f}s")
 
 # Example schema for reference:
 # {

@@ -15,7 +15,13 @@ eventlet.monkey_patch()
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from backend.models.app_data import AppData
-from backend.services.websocket_manager import handle_new_connection
+from backend.services.websocket_manager import (
+    handle_new_connection, 
+    handle_play_audio, 
+    handle_pause_audio, 
+    handle_stop_audio, 
+    handle_seek_audio
+)
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'frontend', 'dist'), static_url_path='')
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -56,9 +62,25 @@ def handle_message(data):
         message = json.loads(data) if isinstance(data, str) else data
         action = message.get('action')
         params = message.get('params', {})
-    except (json.JSONDecodeError, AttributeError):
+        
+        print(f"🔄 Received WebSocket message: {action}")
+        
+        # Route actions to appropriate handlers
+        if action == 'play_audio':
+            handle_play_audio()
+        elif action == 'pause_audio':
+            handle_pause_audio()
+        elif action == 'stop_audio':
+            handle_stop_audio()
+        elif action == 'seek_audio':
+            handle_seek_audio(params)
+        else:
+            print(f"⚠️ Unknown action: {action}")
+            emit('error', {'error': f'Unknown action: {action}'})
+            
+    except (json.JSONDecodeError, AttributeError) as e:
+        print(f"❌ Error parsing WebSocket message: {e}")
         emit('error', {'error': 'Invalid message format'})
-        return
     
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5000, debug=True, allow_unsafe_werkzeug=True)

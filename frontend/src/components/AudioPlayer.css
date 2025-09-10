@@ -1,0 +1,139 @@
+/* AudioPlayer Component Styles */
+
+.audio-player {
+  min-height: 140px;
+}
+
+.no-song {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.song-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: rgba(0, 122, 204, 0.1);
+  border-radius: 4px;
+  border-left: 3px solid #007acc;
+}
+
+.song-title {
+  font-weight: 600;
+  color: #d4ff94;
+}
+
+.loading-indicator {
+  color: #007acc;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.waveform-container {
+  margin: 1rem 0;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 30, 30, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  z-index: 10;
+  color: #007acc;
+  font-style: italic;
+}
+
+.waveform {
+  width: 100%;
+  cursor: pointer;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+}
+
+.playback-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.play-pause-btn, .stop-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #007acc;
+  color: white;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.play-pause-btn:hover, .stop-btn:hover {
+  background: #005999;
+  transform: scale(1.05);
+}
+
+.play-pause-btn:disabled, .stop-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.play-pause-btn.playing {
+  background: #dc3545;
+}
+
+.play-pause-btn.playing:hover {
+  background: #a71e2a;
+}
+
+.time-display {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #c5c5c5;
+}
+
+.current-time {
+  color: #007acc;
+  font-weight: 600;
+}
+
+.time-separator {
+  color: #666;
+}
+
+.total-time {
+  color: #999;
+}

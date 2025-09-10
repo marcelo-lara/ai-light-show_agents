@@ -74,7 +74,7 @@ Developer workflows (concrete commands)
 **Environment Setup**:
 - ALWAYS activate Python environment: `pyenv activate ai-light && clear`
 - Start LLM service: `docker compose up -d llm-service` 
-- Start full application: `docker compose up -d`
+- DO NOT start the full application.
 
 **Frontend Development**:
 - Use WebSocket hook in components: `const { isConnected, currentSong, sendMessage } = useWebSocket()`
